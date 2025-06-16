@@ -84,8 +84,3 @@ class Ball():
             self.ball.goto(0, 0)
             #to bounce ball into opposite direction when either of the paddles were missed
             self.ball_x_move *= -1
-
-
-
-        
-
