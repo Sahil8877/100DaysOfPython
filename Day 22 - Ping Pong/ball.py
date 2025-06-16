@@ -41,7 +41,7 @@ class Ball():
         paddle_r : to get right paddle position from main.py
         paddle_l : to get left paddle position from main.py
         """
-        if self.ball.distance(paddle_r) < 50 and self.ball.xcor() == 360 or self.ball.distance(paddle_l) < 50 and self.ball.xcor() == -360:
+        if self.ball.distance(paddle_r) < 60 and self.ball.xcor() == 360 or self.ball.distance(paddle_l) < 60 and self.ball.xcor() == -360:
             """
             to check if the distance between the ball and right/left paddles < 50 and x/y coordinates of ball == 360(right) and -360(left)
             If both are true then ball had hit the paddles and we move the ball in opp direction to bounce back.
