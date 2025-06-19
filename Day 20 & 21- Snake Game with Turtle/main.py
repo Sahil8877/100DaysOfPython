@@ -9,9 +9,11 @@ screen.setup(width=600,height=600)
 
 moving = True
 snake_obj.score_tracker()
+snake_obj.update_high_score()
+snake_obj.create_snake()
 #keep playing until collision detected
 while moving:
-    
+   
     snake_obj.move() #to move all segments together
     snake_obj.check_food() # to check if the segment touches the food object
     
@@ -19,9 +21,9 @@ while moving:
     
     screen.update() #update the screen with all frames
     if snake_obj.check_wall_collision():
-        moving = False
+        snake_obj.reset_snake()
     if snake_obj.check_body_collision():
-        moving = False
+        snake_obj.reset_snake()
     
 
     screen.listen()

@@ -14,7 +14,7 @@ class Player():
         self.player.penup()
         self.player.color("white")
         self.player.goto(0,-250)
-        self.GAME_SPEED = 0.05
+        self.GAME_SPEED = 0.1
         
     
     def player_move_up(self):
@@ -22,14 +22,14 @@ class Player():
         method to move the player up 10 steps
         """
         if self.player.ycor() < 250:
-            self.player.forward(10)
+            self.player.forward(20)
     
     def player_move_down(self):
         """
         method to move the player down 10 steps
         """
         if self.player.ycor() > -250:
-            self.player.backward(10)
+            self.player.backward(20)
 
     def check_collision(self,cars):
         """

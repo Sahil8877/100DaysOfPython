@@ -16,9 +16,39 @@ class SnakeGame:
         self.current_speed = self.INITIAL_SPEED        
         self.snake_body = []
         self.score_obj = Turtle()
-        self.game_over_obj = Turtle()
+        self.high_score_obj = Turtle()
         self.score = 0
+        # high_score = 0
+
+
+        # with open("Day 20 & 21- Snake Game with Turtle/high_scores.txt", "w") as high_score_file:
+   
+        #     high_score_file.write(str(high_score))
+        with open("Day 20 & 21- Snake Game with Turtle/high_scores.txt", "r") as high_score_file:
+            high_score = high_score_file.read()
+        
+        #create high score turtle object
+        self.high_score = int(high_score)
+        self.high_score_obj.clear()
+        self.high_score_obj.hideturtle()
+        self.high_score_obj.pencolor("white")
+        self.high_score_obj.penup()
+        self.high_score_obj.setpos(200,270)
+        self.high_score_obj.pendown()
+
+        self.update_high_score()
+        
+        #create turtle object for food
+        self.curr_food = Turtle("circle")
+        self.food_colors = ["red","green","blue","maroon","orange","yellow","brown","purple","white","magenta"]
+        self.curr_food.shapesize(0.5,0.5)
+        self.curr_food.color(random.choice(self.food_colors))
+        self.curr_food.penup()
+        self.curr_food.goto(random.randint(-260,260),random.randint(-260,260))
+    
+    def create_snake(self):
         xcor_for_head = 0
+
         #create the initial snake body objects
         for _ in range(self.INITIAL_SIZE):
             snake = Turtle("square")
@@ -29,14 +59,7 @@ class SnakeGame:
             snake.showturtle()
             self.snake_body.append(snake)
             xcor_for_head -= 20
-        #create turtle object for food
-        self.curr_food = Turtle("circle")
-        self.food_colors = ["red","green","blue","maroon","orange","yellow","brown","purple","white","magenta"]
-        self.curr_food.shapesize(0.5,0.5)
-        self.curr_food.color(random.choice(self.food_colors))
-        self.curr_food.penup()
-        self.curr_food.goto(random.randint(-260,260),random.randint(-260,260))
-       
+
     def add_snake_body(self):
         """
         To add new segments behind previous segments of snake body
@@ -114,6 +137,15 @@ class SnakeGame:
             self.random_food_pos()
             self.score_tracker()
             
+    def reset_snake(self):
+        for body in self.snake_body:
+            body.hideturtle()
+        self.snake_body.clear()
+        self.INITIAL_SPEED = 10
+        self.INITIAL_SIZE = 2
+        self.DELAY = 0.1
+        
+        self.create_snake()
 
     def check_body_collision(self):
         """
@@ -125,7 +157,10 @@ class SnakeGame:
             for body in self.snake_body[1:]:
                 if head.distance(body) < 5:
                     print("Collision detected")
-                    self.game_over()
+                    self.score = 0
+                    self.high_score_tracker()
+                    self.score_tracker()
+
                     return True
         return False
     
@@ -135,25 +170,33 @@ class SnakeGame:
         return True if collision detected
         """
         head = self.snake_body[0]
-        print(head.xcor())
-        print(head.ycor())
+        # print(head.xcor())
+        # print(head.ycor())
         if (head.xcor() < -280 or head.xcor() >= 280) or (head.ycor() <= -280 or head.ycor() >= 290) :
             print("Wall collision")
-            self.game_over()
+            self.score = 0
+            self.high_score_tracker()
+            self.score_tracker()
             return True
         return False
         
-    def game_over(self):
+    def update_high_score(self):
+        
+        self.high_score_obj.clear()
+        self.high_score_obj.write(f"High Score : {self.high_score}", align="center",font=("Courier", 16, "bold"))
+
+    def high_score_tracker(self):
         """
         Function to display Game over text if segments collide with eachother or the window
         """
-        self.game_over_obj.clear()
-        self.game_over_obj.hideturtle()
-        self.game_over_obj.pencolor("white")
-        self.game_over_obj.penup()
-        self.game_over_obj.setpos(0,0)
-        self.game_over_obj.pendown()
-        self.game_over_obj.write(f"Game Over!", align="center",font=("Courier", 16, "bold"))
+        if self.score > self.high_score:
+            print('in')
+            self.high_score = self.score
+            with open("Day 20 & 21- Snake Game with Turtle/high_scores.txt",mode="w") as high_score_file:
+                high_score_file.write(str(self.high_score))
+    
+            self.update_high_score()
+        
 
     def score_tracker(self):
         """
