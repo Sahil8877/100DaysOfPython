@@ -10,7 +10,7 @@ screen.bgcolor("black")
 screen.colormode(255)
 screen.setup(width=600,height=600)
 screen.title("Turtle Crossing")
-#turn off animations
+#turn off animations                          
 screen.tracer(0)
 #car_manager class instance
 cars = Car_Manager()
