@@ -1,0 +1,6 @@
+Dear Aron,
+
+I'm writing this letter to demonstrate, how 
+I used python to automate basic tasks.
+
+Thanks.
