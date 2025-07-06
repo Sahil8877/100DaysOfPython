@@ -5,8 +5,8 @@ from data_checker import DataChecker
 from scoreboard import Score
 
 #file paths for bg image an state data
-bg_image_path = "./Day 25/blank_states_img.gif"
-US_state_df = pd.read_csv("./Day 25/50_states.csv")
+bg_image_path = "./Day 25 - US states quiz/blank_states_img.gif"
+US_state_df = pd.read_csv("./Day 25 - US states quiz/50_states.csv")
 
 #writer turtle object for writing in game intructions
 writer_obj = Turtle()
@@ -64,10 +64,18 @@ while playing:
             writer_obj.goto(0,-270)
             writer_obj.pencolor('green')
             writer_obj.write(f"Congrats! You guessed it all.",align='center',font=("roboto", 20, "normal"))
+            playing = False
+
+    elif user_guess == "Exit":
+        #if the user types 'Exit', find missed states from the state database, and create a new csv file
+        missing_states = [state for state in US_state_df["state"] if state not in guessed_states]
+        missing_states_df = pd.DataFrame(missing_states)
+        missing_states_df.to_csv("./Day 25 - US states quiz/states_to_revise.csv")
+        playing = False
     else:
         #if the input is not in the US state df show error
         writer_obj.clear()
         writer_obj.goto(0,-274)
         writer_obj.write(f"Sorry! Looks like an invalid input : '{user_guess}'.",align='center',font=("roboto", 15, "normal"))
 
-screen.exitonclick()
+screen.mainloop()
