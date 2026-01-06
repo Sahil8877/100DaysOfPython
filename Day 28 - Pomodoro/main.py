@@ -27,7 +27,7 @@ def break_counter(seccount):
 
     canvas.itemconfig(timer_text, text=f"{minutes} : {seconds}")
     global break_id 
-    break_id = window.after(1000, break_counter, seccount-1)
+    break_id = window.after(500, break_counter, seccount-1)
     
 def sec_counter(seccount):
     global session_counter
@@ -42,10 +42,10 @@ def sec_counter(seccount):
         
         if session_counter % 4 == 0:
             print(session_counter)
-            break_counter(LONG_BREAK * 60)
+            break_counter(LONG_BREAK)
         else:
             print(session_counter)
-            break_counter(SHORT_BREAK * 60)   
+            break_counter(SHORT_BREAK)   
         return
 
     minutes = math.floor(seccount / 60)
