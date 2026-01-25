@@ -3,7 +3,7 @@ name: Send Email On Cron Schedule
 
 on:
   schedule:
-    - cron: "56 18 * * *"
+    - cron: "*/30 * * * 1"
   workflow_dispatch:
 
 jobs:
