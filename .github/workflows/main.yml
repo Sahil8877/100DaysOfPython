@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug repo contents
+        run: |
+          pwd
+          ls -la
+          
       - name: Checkout dependencies
         run: pip install -r requirements.txt
 
