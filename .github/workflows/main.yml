@@ -1,19 +1,23 @@
-#Cron Scheduled Workflow
+# Cron Scheduled Workflow
 name: Send Email On Cron Schedule
+
 on:
   schedule:
-      - cron: '* * * * *' 
-jobs: 
+    - cron: "* * * * *"
+  workflow_dispatch:
+
+jobs:
   build:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
+    runs-on: ubuntu-latest
 
-        - name: Set up python
-          uses: actions/setup-python@v5
-          with:
-            python-version: "3.11"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-        - name: Run script
-          run: echo "Action success"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run script
+        run: echo "Action success"
