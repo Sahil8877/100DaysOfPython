@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout dependencies
-        run: pip install -r ./requirements.txt
+        run: cwd | pip install -r ./requirements.txt
 
       - name: Checkout code
         uses: actions/checkout@v4
