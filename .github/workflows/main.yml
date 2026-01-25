@@ -1,11 +1,11 @@
 #Cron Scheduled Workflow
 name: Send Email On Cron Schedule
 on:
-    schedule:
-        - cron: '* * * * *' 
+  schedule:
+      - cron: '* * * * *' 
 jobs: 
   build:
-      runs-on: 'ubuntu-latest'
+      runs-on: ubuntu-latest
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
@@ -16,4 +16,4 @@ jobs:
             python-version: "3.11"
 
         - name: Run script
-          run: echo "Acrtion success"
+          run: echo "Action success"
