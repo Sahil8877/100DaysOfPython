@@ -4,7 +4,7 @@ from quote import quote
 sender = 'testeremail8877@gmail.com'
 password = 'jxmg ijzb sgaw anar'
 sahil_email = "sahils.8877@gmail.com"
-khushi_email = "ssuryavanshi8877@gmail.com"
+khushi_email = "khushikhandelwal1997@gmail.com"
 
 
 def mail_for_india():
