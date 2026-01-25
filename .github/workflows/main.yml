@@ -11,14 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Debug repo contents
-        run: |
-          pwd
-          ls
-
-      - name: Checkout dependencies
-        run: pip install -r requirements.txt
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -26,6 +18,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      - name: Debug repo contents
+        run: ls -la
+
+      - name: Checkout dependencies
+        run: pip install -r requirements.txt
 
       - name: Run script
         run: python 'Day 32 - Email Sender/main.py'
