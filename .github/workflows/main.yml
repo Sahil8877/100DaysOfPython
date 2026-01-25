@@ -20,5 +20,5 @@ jobs:
           python-version: "3.11"
 
       - name: Run script
-        run: pyhton 'Day 32 - Email Sender/main.py'
+        run: python 'Day 32 - Email Sender/main.py'
 
