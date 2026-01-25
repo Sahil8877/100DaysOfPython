@@ -100,7 +100,7 @@ website_entry = Entry(width=22,bg="black")
 website_entry.grid(column=3,row=5,sticky="w")
 
 email_entry = Entry(width=40,bg="black")
-email_entry.insert(0,string="sahils.8877@gmail.com")
+email_entry.insert(0,string="sahil@gmail.com")
 email_entry.grid(column=3,row=7)
 
 password_entry = Entry(width=22,bg="black")

@@ -1,0 +1,31 @@
+q,a
+What keyword defines a function in Python?,def
+Which symbol starts a comment in Python?,#
+What data type is returned by input()?,string
+What function prints output to the console?,print
+What keyword is used to import a module?,import
+"What data type is [1, 2, 3]?",list
+"What data type is (1, 2, 3)?",tuple
+What keyword is used to create a variable?,none
+What value represents nothing in Python?,None
+What operator checks equality?,==
+What keyword is used to handle exceptions?,try
+What keyword executes code if no exception occurs?,else
+What keyword always executes in exception handling?,finally
+What built-in function returns list length?,len
+What keyword creates a generator?,yield
+What data structure uses key-value pairs?,dictionary
+What method adds an element to a list?,append
+What method removes and returns last list element?,pop
+What keyword is used for anonymous functions?,lambda
+What module is used for regular expressions?,re
+What protocol allows objects to be iterated?,iterator protocol
+What keyword defines a context manager?,with
+What method initializes a Python class?,__init__
+What dunder method controls string representation?,__str__
+What technique delays function execution?,lazy evaluation
+What keyword is used for asynchronous functions?,async
+What keyword pauses async execution?,await
+What data model feature supports operator overloading?,dunder methods
+What term describes functions accepting any arguments?,variadic
+What structure supports LIFO behavior?,stack
