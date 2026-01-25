@@ -2,7 +2,7 @@
 name: Send Email On Cron Schedule
 on:
     schedule:
-        - cron: '* * * * *' 
+        - cron: '*/1 * * * *' 
 jobs: 
     build:
         runs-on: 'ubuntu-latest'
