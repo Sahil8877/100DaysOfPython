@@ -3,7 +3,7 @@ name: Send Email On Cron Schedule
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "56 18 * * *"
   workflow_dispatch:
 
 jobs:
@@ -27,4 +27,3 @@ jobs:
 
       - name: Run script
         run: python 'Day 32 - Email Sender/main.py'
-
