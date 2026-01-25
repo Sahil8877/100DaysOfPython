@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout dependencies
+        run: pin install -r requirements.txt
+
       - name: Checkout code
         uses: actions/checkout@v4
 
