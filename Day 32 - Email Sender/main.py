@@ -37,10 +37,10 @@ curr_time_uk = now_utc.astimezone(pytz.timezone("Europe/London"))
 
 print(curr_time_india,curr_time_uk.hour)
 
-if curr_time_uk.hour == 9 and curr_time_uk.minute == 0:
+if curr_time_uk.hour == 9 and curr_time_uk.minute < 30:
     mail_for_uk()
     print('Email prepared for sending to UK')
-if curr_time_india.hour == 9 and curr_time_india.minute == 0:
+if curr_time_india.hour == 9 and curr_time_india.minute < 30:
     mail_for_india()
     print('Email prepared for sending to India')
 
