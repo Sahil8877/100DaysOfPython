@@ -12,7 +12,7 @@ sheetal_email = "sheetals.8877@gmail.com"
 
 def mail_for_india():
     generate_quote = quote('Growth Motivation',limit=20)
-    receiver_dict ={"Soumya":soumya_email,"Ronak",ronak_email,"Sheetal":sheetal_email}
+    receiver_dict ={"Soumya":soumya_email,"Ronak":ronak_email,"Sheetal":sheetal_email}
     for receiver in receiver_dict:
         random_quote = random.choice(generate_quote)
         message = f"Subject:Hi {receiver}, Todays Quote From {random_quote['author']}.\n\nYour Monday Motivation :\n\n\n{random_quote['quote']}\n\n\nPlease do not reply to this email."
@@ -24,7 +24,7 @@ def mail_for_india():
 
 def mail_for_uk():
     generate_quote = quote('Growth Motivation',limit=20)
-    receiver_dict ={"Sahil":sahil_email,"Khushi":khushi_email,"Rameez",rameez_email}
+    receiver_dict ={"Sahil":sahil_email,"Khushi":khushi_email,"Rameez":rameez_email}
     for receiver in receiver_dict:
         random_quote = random.choice(generate_quote)
         message = f"Subject:Hi {receiver}, Todays Quote From {random_quote['author']}.\n\nYour Monday Motivation :\n\n\n{random_quote['quote']}\n\n\nPlease do not reply to this email."
