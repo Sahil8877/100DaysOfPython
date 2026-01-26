@@ -15,7 +15,7 @@ def mail_for_india():
     receiver_dict ={"Soumya":soumya_email,"Ronak":ronak_email,"Sheetal":sheetal_email}
     for receiver in receiver_dict:
         random_quote = random.choice(generate_quote)
-        message = f"Subject:Hi {receiver}, Todays Quote From {random_quote['author']}.\n\nYour Monday Motivation :\n\n\n{random_quote['quote']}\n\n\nPlease do not reply to this email."
+        message = f"Subject:Hi {receiver}, Todays Quote From {random_quote['author']}.\n\nYour Daily Motivation :\n\n\n{random_quote['quote']}\n\n\nPlease do not reply to this email."
         with smtplib.SMTP(host='smtp.gmail.com') as conn:
             conn.starttls()
             conn.login(user=sender,password=password)
