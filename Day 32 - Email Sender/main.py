@@ -1,8 +1,9 @@
-import smtplib,random,datetime,pytz
+import smtplib,random,datetime,pytz,os
 from quote import quote
 
-sender = 'testeremail8877@gmail.com'
-password = 'jxmg ijzb sgaw anar'
+sender = os.environ['${{SENDER_EMAIL}}']
+password = os.environ['${{SENDER_EMAIL_PASSWORD}}']
+
 sahil_email = "sahils.8877@gmail.com"
 khushi_email = "khushikhandelwal1997@gmail.com"
 ronak_email = "ronakjanawa@gmail.com"
