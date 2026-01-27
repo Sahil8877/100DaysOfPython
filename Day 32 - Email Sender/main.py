@@ -6,7 +6,7 @@ password = os.environ["SENDER_EMAIL_PASS"]
 recipients_list_ind = os.environ["RECEPIENTS_LIST_IND"]
 recipients_list_uk = os.environ["RECEPIENTS_LIST_UK"]
 
-def parse_recepients(recepients_list):
+def parse_recipients(recepients_list):
     receiver_dict = {}
     for key in recepients_list.split(','):
         name, email = key.split(':')
@@ -15,7 +15,7 @@ def parse_recepients(recepients_list):
 
 def mail_for_india():
     generate_quote = quote('Growth Motivation',limit=20)
-    receiver_dict = parse_recepients(recipients_list_ind)
+    receiver_dict = parse_recipients(recipients_list_ind)
     for receiver in receiver_dict:
         random_quote = random.choice(generate_quote)
         message = f"Subject:Hi {receiver}, Todays Quote From {random_quote['author']}.\n\nYour Daily Motivation :\n\n\n{random_quote['quote']}\n\n\nPlease do not reply to this email."
@@ -26,7 +26,7 @@ def mail_for_india():
 
 def mail_for_uk():
     generate_quote = quote('Growth Motivation',limit=20)
-    receiver_dict = parse_recepients(recipients_list_uk)
+    receiver_dict = parse_recipients(recipients_list_uk)
     for receiver in receiver_dict:
         random_quote = random.choice(generate_quote)
         message = f"Subject:Hi {receiver}, Todays Quote From {random_quote['author']}.\n\nYour Daily Motivation :\n\n\n{random_quote['quote']}\n\n\nPlease do not reply to this email."
