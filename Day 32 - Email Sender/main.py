@@ -3,8 +3,8 @@ from quote import quote
 
 sender = os.environ["SENDER_EMAIL"]
 password = os.environ["SENDER_EMAIL_PASS"]
-recipients_list_ind = os.environ["RECEPIENTS_LIST_IND"]
-recipients_list_uk = os.environ["RECEPIENTS_LIST_UK"]
+recipients_list_ind = os.environ["RECIPIENTS_LIST_IND"]
+recipients_list_uk = os.environ["RECIPIENTS_LIST_UK"]
 
 def parse_recipients(recepients_list):
     receiver_dict = {}
