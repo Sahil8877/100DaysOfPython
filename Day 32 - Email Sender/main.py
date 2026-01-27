@@ -1,8 +1,8 @@
 import smtplib,random,datetime,pytz,os
 from quote import quote
 
-sender = os.environ['SENDER_EMAIL']
-password = os.environ['SENDER_EMAIL_PASSWORD']
+sender = os.environ["SENDER_EMAIL"]
+password = os.environ["SENDER_EMAIL_PASSWORD"]
 
 sahil_email = "sahils.8877@gmail.com"
 khushi_email = "khushikhandelwal1997@gmail.com"
