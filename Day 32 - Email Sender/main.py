@@ -1,4 +1,4 @@
-9import smtplib,random,datetime,pytz,os
+import smtplib,random,datetime,pytz,os
 from quote import quote
 
 sender = os.environ["SENDER_EMAIL"]
