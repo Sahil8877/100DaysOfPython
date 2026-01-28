@@ -55,22 +55,12 @@ def send_email(receiver_dict):
             message = f"Subject:Hi {receiver}, Todays Quote From {random_quote['author']}.\n\nYour Daily Motivation :\n\n\n{random_quote['quote']}\n\n\nPlease do not reply to this email."
             conn.sendmail(from_addr=sender, to_addrs=receiver_dict[receiver], msg=message.encode("utf-8"))
 
-def mail_for_uk():
-    receiver_dict = parse_recipients(recipients_list_uk)
-    send_email(receiver_dict)
-
-now_utc = datetime.datetime.now(pytz.utc)
-curr_time_india = now_utc.astimezone(pytz.timezone("Asia/Kolkata"))
-curr_time_uk = now_utc.astimezone(pytz.timezone("Europe/London"))
-
-print(curr_time_india,curr_time_uk.hour)
-
-if curr_time_uk.hour == 6 and curr_time_uk.minute < 45:
-    mail_for_uk()
-    print('Email prepared for sending to UK')
-if curr_time_india.hour == 6 and curr_time_india.minute < 45:
-    mail_for_india()
-    print('Email prepared for sending to India')
+if curr_time_uk >= TARGET_TIME_UK and last_sent_uk != str(curr_time_uk.date()):
+        mail_for_uk()
+        print('Email prepared for sending to UK')
+if curr_time_india >= TARGET_TIME_IND and last_sent_ind != str(curr_time_india.date()):
+        mail_for_india()
+        print('Email prepared for sending to India')
 
 
 
