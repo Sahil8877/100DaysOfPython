@@ -1,4 +1,4 @@
-import smtplib,random,datetime,pytz,os
+9import smtplib,random,datetime,pytz,os
 from quote import quote
 
 sender = os.environ["SENDER_EMAIL"]
@@ -37,10 +37,10 @@ curr_time_uk = now_utc.astimezone(pytz.timezone("Europe/London"))
 
 print(curr_time_india,curr_time_uk.hour)
 
-if 6 <= curr_time_uk.hour <= 7 and curr_time_uk.minute < 45:
+if 6 <= curr_time_uk.hour <= 7 and curr_time_uk.minute < 30:
     mail_for_uk()
     print('Email prepared for sending to UK')
-if 6 <= curr_time_india.hour <= 7 and curr_time_india.minute < 45:
+if 6 <= curr_time_india.hour <= 7 and curr_time_india.minute < 30:
     mail_for_india()
     print('Email prepared for sending to India')
 
