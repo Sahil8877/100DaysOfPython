@@ -61,7 +61,3 @@ if curr_time_uk >= TARGET_TIME_UK and last_sent_uk != str(curr_time_uk.date()):
 if curr_time_india >= TARGET_TIME_IND and last_sent_ind != str(curr_time_india.date()):
         mail_for_india()
         print('Email prepared for sending to India')
-
-
-
-
