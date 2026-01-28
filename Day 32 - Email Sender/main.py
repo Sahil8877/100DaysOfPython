@@ -40,7 +40,7 @@ print(curr_time_india,curr_time_uk.hour)
 if curr_time_uk.hour == 6 and curr_time_uk.minute < 45:
     mail_for_uk()
     print('Email prepared for sending to UK')
-if 9 <= curr_time_india.hour <= 10 and curr_time_india.minute < 45:
+if 6 <= curr_time_india.hour <= 7 and curr_time_india.minute < 45:
     mail_for_india()
     print('Email prepared for sending to India')
 
