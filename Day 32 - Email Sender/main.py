@@ -4,7 +4,8 @@ from quote import quote
 sender = os.environ["SENDER_EMAIL"]
 password = os.environ["SENDER_EMAIL_PASS"]
 recipients_list_ind = os.environ["RECIPIENTS_LIST_IND"]
-recipients_list_uk = os.environ["RECIPIENTS_LIST_UK"]
+#recipients_list_uk = os.environ["RECIPIENTS_LIST_UK"]
+recipients_list_uk = 'Sahil:sahils.8877@gmail.com'
 
 now_utc = datetime.datetime.now(pytz.utc)
 curr_time_india = now_utc.astimezone(pytz.timezone("Asia/Kolkata"))
@@ -36,13 +37,15 @@ def parse_recipients(recipients_list):
 def mail_for_india():
     receiver_dict = parse_recipients(recipients_list_ind)
     send_email(receiver_dict)
+   
     with open('mail_sent_to_ind.txt','w') as file:
         file.write(f'{curr_time_india.date()}')
     
 def mail_for_uk():
     receiver_dict = parse_recipients(recipients_list_uk)
+    file_path = os.path.join(os.getcwd(),'mail_sent_to_uk.txt')
     send_email(receiver_dict)
-    with open('mail_sent_to_uk.txt','w') as file:
+    with open(file_path,'w') as file:
         file.write(f'{curr_time_uk.date()}')
 
 def send_email(receiver_dict):
@@ -54,10 +57,11 @@ def send_email(receiver_dict):
             random_quote = random.choice(generate_quote)
             message = f"Subject:Hi {receiver}, Todays Quote From {random_quote['author']}.\n\nYour Daily Motivation :\n\n\n{random_quote['quote']}\n\n\nPlease do not reply to this email."
             conn.sendmail(from_addr=sender, to_addrs=receiver_dict[receiver], msg=message.encode("utf-8"))
-"""
+
 if curr_time_uk >= TARGET_TIME_UK and last_sent_uk != str(curr_time_uk.date()):
         mail_for_uk()
         print('Email prepared for sending to UK')
+"""
 if curr_time_india >= TARGET_TIME_IND and last_sent_ind != str(curr_time_india.date()):
         mail_for_india()
         print('Email prepared for sending to India')"""
