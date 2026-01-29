@@ -45,5 +45,6 @@ jobs:
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'Github@action.com'
-          git add mail_sent_to_uk.txt mail_sent_to_ind.txt || true
+          git add . || true
+          git status
           git diff-index --quiet HEAD || (git commit -m 'Updated by GitHub Actions' && git push)
