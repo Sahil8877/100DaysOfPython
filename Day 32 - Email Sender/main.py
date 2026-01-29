@@ -4,8 +4,7 @@ from quote import quote
 sender = os.environ["SENDER_EMAIL"]
 password = os.environ["SENDER_EMAIL_PASS"]
 recipients_list_ind = os.environ["RECIPIENTS_LIST_IND"]
-#recipients_list_uk = os.environ["RECIPIENTS_LIST_UK"]
-recipients_list_uk = 'Sahil:sahils.8877@gmail.com'
+recipients_list_uk = os.environ["RECIPIENTS_LIST_UK"]
 
 now_utc = datetime.datetime.now(pytz.utc)
 curr_time_india = now_utc.astimezone(pytz.timezone("Asia/Kolkata"))
