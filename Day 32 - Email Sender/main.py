@@ -60,7 +60,6 @@ def send_email(receiver_dict):
 if curr_time_uk >= TARGET_TIME_UK and last_sent_uk != str(curr_time_uk.date()):
         mail_for_uk()
         print('Email prepared for sending to UK')
-"""
 if curr_time_india >= TARGET_TIME_IND and last_sent_ind != str(curr_time_india.date()):
         mail_for_india()
-        print('Email prepared for sending to India')"""
+        print('Email prepared for sending to India')
