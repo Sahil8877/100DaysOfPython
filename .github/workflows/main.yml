@@ -6,9 +6,6 @@ env:
     RECIPIENTS_LIST_IND: ${{secrets.RECIPIENTS_LIST_IND}}
     RECIPIENTS_LIST_UK: ${{secrets.RECIPIENTS_LIST_UK}}
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
   
   # The Cron Schedule
   schedule:
