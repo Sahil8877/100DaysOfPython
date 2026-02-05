@@ -36,13 +36,15 @@ def parse_recipients(recipients_list):
 def mail_for_india():
     receiver_dict = parse_recipients(recipients_list_ind)
     send_email(receiver_dict)
+   
     with open('mail_sent_to_ind.txt','w') as file:
         file.write(f'{curr_time_india.date()}')
     
 def mail_for_uk():
     receiver_dict = parse_recipients(recipients_list_uk)
+    file_path = os.path.join(os.getcwd(),'mail_sent_to_uk.txt')
     send_email(receiver_dict)
-    with open('mail_sent_to_uk.txt','w') as file:
+    with open(file_path,'w') as file:
         file.write(f'{curr_time_uk.date()}')
 
 def send_email(receiver_dict):
@@ -52,7 +54,7 @@ def send_email(receiver_dict):
         conn.login(user=sender,password=password)
         for receiver in receiver_dict:
             random_quote = random.choice(generate_quote)
-            message = f"Subject:Hi {receiver}, Todays Quote From {random_quote['author']}.\n\nYour Daily Motivation :\n\n\n{random_quote['quote']}\n\n\nPlease do not reply to this email."
+            message = f"Subject:Hi {receiver}, Todays Quote From {random_quote['author']}.\n\nYour Monday Motivation :\n\n\n{random_quote['quote']}\n\n\nPlease do not reply to this email."
             conn.sendmail(from_addr=sender, to_addrs=receiver_dict[receiver], msg=message.encode("utf-8"))
 
 if curr_time_uk >= TARGET_TIME_UK and last_sent_uk != str(curr_time_uk.date()):
