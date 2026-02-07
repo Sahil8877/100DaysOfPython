@@ -39,23 +39,13 @@ for date in asteroid_data['near_earth_objects']:
             'velocity' : round(float(astro_speed_in_kmph),2),
             }
         
-# hazardous_astro = []
+hazardous_astro = []
 closes_astro_list = []
-
-hazardous_astro = [{
-            'name': 'None',
-            'miss_dist' : 0,
-            'date' : 'DD:MM:YYYY',
-            'time' : '00:00:00',
-            'dist_from_moon' : 0,
-            'velocity' : 0,
-        }]
-        
 
 for name, data in passing_astr.items():
     
     if data['hazardous']:
-        hazardous_astro[0] = ({
+        hazardous_astro.append({
             'name':name.strip("( )"),
             'miss_dist' : round(float(data['miss_dist']),2),
             'date' : data['approach_date'],
@@ -72,6 +62,14 @@ if hazardous_astro:
         if astro['miss_dist'] < closes_astro_list['miss_dist']:
             closes_astro_list = astro
 else:
+    hazardous_astro = [{
+            'name': 'None',
+            'miss_dist' : 0,
+            'date' : 'DD:MM:YYYY',
+            'time' : '00:00:00',
+            'dist_from_moon' : 0,
+            'velocity' : 0,
+        }]
     closes_astro_list = None
 
 
