@@ -11,6 +11,7 @@ recipients_list_uk_rain_alert = os.environ["RECIPIENTS_LIST_UK_RAIN_ALERT"]
 
 def parse_recipients(recipients_list):
     receiver_dict = {}
+    print('len',len(recipients_list_uk_rain_alert))
     if len(recipients_list_uk_rain_alert) > 1:
         for key in recipients_list.split(','):
             name, email = key.split(':')
