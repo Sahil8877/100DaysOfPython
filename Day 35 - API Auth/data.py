@@ -10,7 +10,6 @@ class WeatherData:
             'exclude' : 'daily,current'
         }
         self.api_call = requests.get(url=f"https://api.openweathermap.org/data/3.0/onecall",params=parameters)
-        self.clear_day_forecast()
 
     def minutely_forecast(self):
         try:
