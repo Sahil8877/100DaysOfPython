@@ -38,7 +38,7 @@ def check_weather_for_rain():
 
     pop_value = fetch_weather_data.hourly_pop()
 
-    print(f"light_rain_count = {light_rain_count}\nmoderate_rain_count = {moderate_rain_count}\nheavy_rain_count = {heavy_rain_count}\npop = {pop_value['pop']}\navg_intensity_over_next30 = {avg_intensity_over_next30}")
+    print(f"light_rain_count = {light_rain_count}\nmoderate_rain_count = {moderate_rain_count}\nheavy_rain_count = {heavy_rain_count}\npop = {pop_value['pop']}\navg_intensity_over_next30 = {median_intensity_over_next30}")
 
 
     if heavy_rain_count >= 5 and median_intensity_over_next30 >= 8 and pop_value['pop'] >= 0.80:
