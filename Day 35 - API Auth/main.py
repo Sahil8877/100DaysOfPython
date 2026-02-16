@@ -1,4 +1,5 @@
 import data
+import statistics
 
 def check_weather_for_rain():
 
@@ -29,7 +30,7 @@ def check_weather_for_rain():
                 heavy_rain_count += 1
 
     if len(sum_of_precipitation) > 0:
-        avg_intensity_over_next30 = sum(sum_of_precipitation)/len(sum_of_precipitation)
+        avg_intensity_over_next30 = statistics.median(sum_of_precipitation)
     else:
         avg_intensity_over_next30 = 0
 
