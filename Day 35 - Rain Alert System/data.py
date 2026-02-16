@@ -28,8 +28,8 @@ class WeatherData:
             return minutely_forecast_list
         except requests.exceptions.HTTPError as http_err:
             print(f"HTTP error occurred: {http_err}")  
-        except Exception as err:
-            print(f"Other error occurred: {err}")
+        # except Exception as err:
+        #     print(f"Other error occurred: {err}")
 
 
     def hourly_pop(self):
