@@ -44,7 +44,7 @@ def check_weather_for_rain():
     moderate_rain_count = 12
     heavy_rain_count = 0
     pop_value = {'pop':0.2}
-    avg_intensity_over_next30 = 2.489
+    avg_intensity_over_next30 = 2.48
     
     if heavy_rain_count >= 5 and avg_intensity_over_next30 >= 8 and pop_value['pop'] >= 0.80:
         
