@@ -22,14 +22,14 @@ def check_weather_for_rain():
         print(minute['precipitation'])
         #if minute['precipitation'] >= 0.1:
         rain_level_mm = minute['precipitation'] #for mm/hr
-            print('rain_level_mm :',rain_level_mm)
-            sum_of_precipitation.append(rain_level_mm)
-            if 3 <= rain_level_mm < 8:
-                moderate_rain_count += 1
-            elif 1 <= rain_level_mm < 3:
-                light_rain_count += 1
-            elif rain_level_mm >= 8:
-                heavy_rain_count += 1
+        print('rain_level_mm :',rain_level_mm)
+        sum_of_precipitation.append(rain_level_mm)
+        if 3 <= rain_level_mm < 8:
+            moderate_rain_count += 1
+        elif 1 <= rain_level_mm < 3:
+            light_rain_count += 1
+        elif rain_level_mm >= 8:
+            heavy_rain_count += 1
 
     if len(sum_of_precipitation) > 0:
         avg_intensity_over_next30 = statistics.median(sum_of_precipitation)
