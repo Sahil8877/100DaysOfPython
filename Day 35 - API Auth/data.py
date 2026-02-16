@@ -20,7 +20,7 @@ class WeatherData:
                           "precipitation" : data['precipitation']}
                 
                 minutely_forecast_list.append(entry)
-            print(minutely_forecast_list)
+            
             return minutely_forecast_list
         except requests.exceptions.HTTPError as http_err:
             print(f"HTTP error occurred: {http_err}")  
