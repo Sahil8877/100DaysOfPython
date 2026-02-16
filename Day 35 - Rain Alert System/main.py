@@ -1,13 +1,23 @@
 import data
 import statistics
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+
+def fetch_email_data():
+    sender = os.getenv("SENDER_EMAIL")
+    password = os.getenv("SENDER_EMAIL_PASS")
+    recipients_list_uk_rain_alert = os.getenv("RECIPIENTS_LIST_UK_RAIN_ALERT")
+    return sender,password,recipients_list_uk_rain_alert
 
 def check_weather_for_rain():
-
     previous_state = None
     fetch_weather_data = data.WeatherData()
     minutely_data = fetch_weather_data.minutely_forecast()
     sum_of_precipitation = []
     send_alert = False
+    
     light_rain_count = 0
     moderate_rain_count = 0
     heavy_rain_count = 0

@@ -1,8 +1,8 @@
 import smtplib
-from main import check_weather_for_rain
-import os
+from main import check_weather_for_rain, fetch_email_data
 
 previous_state, send_alert = check_weather_for_rain()
+sender, password, recipients_list_uk_rain_alert = fetch_email_data()
 
 if previous_state == 'Light Rain Alert':
     message = f"Subject: Drizzle Alert! 💧 Tiny Drops Incoming\n\nLight rain ☔️ expected in the next 30 minutes ⏰. Might want to grab that umbrella!"
@@ -10,10 +10,6 @@ elif previous_state == 'Moderate Rain Alert':
     message = f"Subject: Rain Alert! 🌧️ It's Getting Wet\n\nModerate rain ☔️ coming your way in 30 minutes ⏰. Definitely grab your umbrella!"
 elif previous_state == 'Heavy Rain Alert':
     message = f"Subject: Heavy Rain Alert! ⛈️ Big Drops Incoming\n\nHeavy downpour ☔️ expected in the next 30 minutes ⏰. Stay inside or gear up!"   
-
-sender = os.environ["SENDER_EMAIL"]
-password = os.environ["SENDER_EMAIL_PASS"]
-recipients_list_uk_rain_alert = os.environ["RECIPIENTS_LIST_UK_RAIN_ALERT"]
 
 def parse_recipients(recipients_list):
     receiver_dict = {}
