@@ -2,8 +2,8 @@ import data
 import statistics
 
 def check_weather_for_rain():
+
     previous_state = None
-    """
     fetch_weather_data = data.WeatherData()
     minutely_data = fetch_weather_data.minutely_forecast()
     sum_of_precipitation = []
@@ -11,7 +11,6 @@ def check_weather_for_rain():
     light_rain_count = 0
     moderate_rain_count = 0
     heavy_rain_count = 0
-    
 
     try:
         with open('previous_state.txt','r') as file:
@@ -33,20 +32,15 @@ def check_weather_for_rain():
                 heavy_rain_count += 1
 
     if len(sum_of_precipitation) > 0:
-        avg_intensity_over_next30 = statistics.median(sum_of_precipitation)
+        median_intensity_over_next30 = statistics.median(sum_of_precipitation)
     else:
-        avg_intensity_over_next30 = 0
+        median_intensity_over_next30 = 0
 
     pop_value = fetch_weather_data.hourly_pop()
 
     print(f"light_rain_count = {light_rain_count}\nmoderate_rain_count = {moderate_rain_count}\nheavy_rain_count = {heavy_rain_count}\npop = {pop_value['pop']}\navg_intensity_over_next30 = {avg_intensity_over_next30}")
-    """
-    light_rain_count = 5
-    moderate_rain_count = 12
-    heavy_rain_count = 0
-    pop_value = {'pop':0.2}
-    median_intensity_over_next30 = 2.48
-    
+
+
     if heavy_rain_count >= 5 and median_intensity_over_next30 >= 8 and pop_value['pop'] >= 0.80:
         
         alert = "Heavy Rain Alert"
