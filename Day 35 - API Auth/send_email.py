@@ -23,6 +23,7 @@ if send_alert:
         with smtplib.SMTP(host='smtp.gmail.com') as conn:
             conn.starttls()
             conn.login(user=sender,password=password)
+            print(receiver_dict)
             for receiver in receiver_dict:
                 conn.sendmail(
                     msg=message.encode("utf-8"),
