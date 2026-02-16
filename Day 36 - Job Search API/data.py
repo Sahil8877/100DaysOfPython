@@ -1,9 +1,13 @@
 import requests
 import json
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
 url = "https://jsearch.p.rapidapi.com/search"
 
 headers = {
-	"x-rapidapi-key": "a436a4742bmshf405039ea3cd2ebp149ad1jsn1318e863b159",
+	"x-rapidapi-key": os.getenv("RAPID_API_KEY"),
 	"x-rapidapi-host": "jsearch.p.rapidapi.com"
 }
 
@@ -529,7 +533,7 @@ def get_dev_jobs():
         }
     ]
     }
-    # json_data = json.dumps()
+    # json_data = json.dumps(json_formatted)
     # print(json_formatted)
     return data
 

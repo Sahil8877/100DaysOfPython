@@ -1,20 +1,24 @@
 import requests
 import datetime
+import os
 
 class WeatherData:
     def __init__(self):
         parameters = {            
             'lat' : 55.84911,
             'lon' : -4.22674,
-            'appid' : '436342267ecf2d4b2694e0f9404073d3',
-            'exclude' : 'daily,current'
+            'appid' : os.getenv("OW_API_KEY"),
+            'exclude' : 'daily,current',
         }
         self.api_call = requests.get(url=f"https://api.openweathermap.org/data/3.0/onecall",params=parameters)
+        print(self.api_call.status_code)
+       
 
     def minutely_forecast(self):
         try:
             minutely_forecast_list = []
             self.response = self.api_call.json()
+  
             for data in self.response['minutely']:
                 entry = {"date" : str(datetime.datetime.utcfromtimestamp(data['dt'])), 
                           "precipitation" : data['precipitation']}
