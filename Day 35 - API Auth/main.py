@@ -36,21 +36,21 @@ def check_weather_for_rain():
     pop_value = fetch_weather_data.hourly_pop()
 
     print(f"light_rain_count = {light_rain_count}\nmoderate_rain_count = {moderate_rain_count}\nheavy_rain_count = {heavy_rain_count}\npop = {pop_value['pop']}\navg_intensity_over_next30 = {avg_intensity_over_next30}")
-    if heavy_rain_count >= 5 and avg_intensity_over_next30 >= 10 and pop_value['pop'] >= 0.70:
+    if heavy_rain_count >= 5 and avg_intensity_over_next30 >= 8 and pop_value['pop'] >= 0.70:
         
         alert = "Heavy Rain Alert"
         if previous_state != alert:
             previous_state = alert
             send_alert = True
         print("Heavy Rain Alert")
-    elif moderate_rain_count >= 5 and avg_intensity_over_next30 >= 8 and pop_value['pop'] >= 0.60:
+    elif moderate_rain_count >= 5 and avg_intensity_over_next30 >= 6 and pop_value['pop'] >= 0.60:
         
         alert = "Moderate Rain Alert"
         if previous_state != alert:
             previous_state = alert
             send_alert = True
         print("Moderate Rain Alert")
-    elif light_rain_count >= 5 and avg_intensity_over_next30 >= 3 and pop_value['pop'] >= 0.50:
+    elif light_rain_count >= 5 and avg_intensity_over_next30 >= 2 and pop_value['pop'] >= 0.50:
         
         alert = "Light Rain Alert"
         if previous_state != alert:
