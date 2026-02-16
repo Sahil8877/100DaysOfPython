@@ -21,6 +21,7 @@ def check_weather_for_rain():
     for minute in minutely_data[:30]:
         if minute['precipitation'] >= 0.1:
             rain_level_mm = minute['precipitation'] #for mm/hr
+            print(rain_level_mm)
             sum_of_precipitation.append(rain_level_mm)
             if 3 <= rain_level_mm < 8:
                 moderate_rain_count += 1
