@@ -1,5 +1,5 @@
 extra.py
 mail_sent_to_uk.txt
 .env
-.pyc
-.DS_Store
+*.pyc
+*.DS_Store
