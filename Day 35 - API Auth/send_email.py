@@ -28,7 +28,7 @@ if send_alert:
                 conn.sendmail(
                     msg=message.encode("utf-8"),
                     from_addr=sender,
-                    to_addrs=receiver,
+                    to_addrs=receiver_dict[receiver],
                 )
             print("email sent")
             
