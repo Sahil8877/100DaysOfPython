@@ -2,3 +2,4 @@ quote
 pytz
 requests
 dotenv
+pyshorteners
