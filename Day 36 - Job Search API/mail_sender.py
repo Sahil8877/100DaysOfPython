@@ -41,6 +41,18 @@ job_queries = [
             "employment_types":"FULLTIME,INTERN",
             "job_requirements":"under_3_years_experience"
         }
+    },
+    {
+        '3':
+        {
+            "query":"law internships in bangalore",
+            "page":"1",
+            "num_pages":"1",
+            "country":"uk",
+            "date_posted":"all",
+            "employment_types":"INTERN",
+            "job_requirements":"under_3_years_experience"
+        }
     }
 ]
 def fetch_email_data():
