@@ -2,6 +2,7 @@ name: Rain Alert Email
 
 env:
     SENDER_EMAIL: ${{secrets.SENDER_EMAIL}}
+    OW_API_KEY: ${{secrets.OW_API_KEY}}
     SENDER_EMAIL_PASS: ${{secrets.SENDER_EMAIL_PASSWORD}}
     RECIPIENTS_LIST_UK_RAIN_ALERT: ${{secrets.RECIPIENTS_LIST_UK_RAIN_ALERT}}
 on:
