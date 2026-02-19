@@ -4,6 +4,7 @@ env:
     SENDER_EMAIL: ${{secrets.SENDER_EMAIL}}
     SENDER_EMAIL_PASS: ${{secrets.SENDER_EMAIL_PASSWORD}}
     RECIPIENTS_LIST_UK_FOR_JOBS: ${{secrets.RECIPIENTS_LIST_UK_FOR_JOBS}}
+    RAPID_API_KEY: ${{secrets.RAPID_API_KEY}}
 on:
   
   # The Cron Schedule
