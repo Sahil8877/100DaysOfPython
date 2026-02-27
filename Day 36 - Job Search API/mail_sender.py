@@ -33,7 +33,7 @@ job_queries = [
     {
         '2':
         {
-            "query":"marketing jobs in uk",
+            "query":"email marketing jobs in uk",
             "page":"1",
             "num_pages":"1",
             "country":"uk",
