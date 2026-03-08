@@ -35,7 +35,7 @@ if clean_flights:
         # ---- Layover info ----
         layover_text = ""
 
-        if "layover" in flight and flight["layover"]:
+        if "layover" in flight and flight["layovers"]:
             layover_text += "\n🛑 Layovers:\n"
 
             for layover in flight["layover"]:
