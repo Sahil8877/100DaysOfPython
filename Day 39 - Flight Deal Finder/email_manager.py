@@ -34,8 +34,8 @@ if clean_flights:
         if "layovers" in flight and flight["layovers"]:
             layover_text += "\n  🛑 Layovers:\n"
             for idx, layover in enumerate(flight["layovers"], start=1):
-                arr_time = datetime.strptime(layover["arrival_time"], "%Y-%m-%d %H:%M")
-                dep_time = datetime.strptime(layover["departure_time"], "%Y-%m-%d %H:%M")
+                arr_time = datetime.datetime.strptime(layover["arrival_time"], "%Y-%m-%d %H:%M")
+                dep_time = datetime.datetime.strptime(layover["departure_time"], "%Y-%m-%d %H:%M")
                 duration_hrs = round((dep_time - arr_time).total_seconds()/3600, 1)
         
                 layover_text += (
