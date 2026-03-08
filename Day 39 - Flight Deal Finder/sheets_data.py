@@ -1,9 +1,12 @@
 import requests
 import logging
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 
-url = "https://api.sheety.co/2a738664cb10b9ea4971b2ff1892cbd3/flightDealData/sheet1"
+url = os.getenv('SHEETS_URL_FLIGHT_DEAL')
 
 headers = {
     "User-Agent": "Mozilla/5.0"
