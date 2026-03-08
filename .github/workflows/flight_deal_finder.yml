@@ -3,6 +3,7 @@ name: Flight Deal Finder
 env:
     SENDER_EMAIL: ${{secrets.SENDER_EMAIL}}
     SENDER_EMAIL_PASS: ${{secrets.SENDER_EMAIL_PASSWORD}}
+    SERP_API_KEY: ${{secrets.SERP_API_KEY}}
 on:
   
   # The Cron Schedule
