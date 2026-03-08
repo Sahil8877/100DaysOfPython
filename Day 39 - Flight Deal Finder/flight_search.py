@@ -26,7 +26,9 @@ def search_result():
             }
             search = GoogleSearch(params)
             result = search.get_dict()
+            
             best_flights.append(result)
+            print(search.json())
         except:
             print("There was an error :",search.get_response())
 
