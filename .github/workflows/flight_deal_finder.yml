@@ -5,12 +5,13 @@ env:
     SENDER_EMAIL_PASS: ${{secrets.SENDER_EMAIL_PASSWORD}}
     SERP_API_KEY: ${{secrets.SERP_API_KEY}}
     SHEETS_URL_FLIGHT_DEAL: ${{secrets.SHEETS_URL_FLIGHT_DEAL}}
+    SHEETS_FLIGHT_DEAL_DELETE_URL: ${{secrets.SHEETS_FLIGHT_DEAL_DELETE_URL}}
 
 on:
   
   # The Cron Schedule
   schedule:
-    - cron: "* * * * *"
+    - cron: "0 */6 * * *"
     
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
