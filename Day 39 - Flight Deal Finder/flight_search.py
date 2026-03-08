@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 flight_list = sheets_data.sheets_data_list
-
+print("API KEY FOUND:", bool(os.getenv("SERP_API_KEY")))
 def search_result():
     best_flights = []
     search_date = datetime.datetime.now().date() + datetime.timedelta(days=90)
@@ -28,8 +28,8 @@ def search_result():
             search = GoogleSearch(params)
             result = search.get_dict()
 
-            print(result)  # debugging
-
+            result = search.get_dict()
+            print("SERP RESULT:", result)
             best_flights.append(result)
 
         except Exception as e:
