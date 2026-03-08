@@ -5,7 +5,7 @@ import logging
 sender = os.getenv('SENDER_EMAIL')
 password = os.getenv('SENDER_EMAIL_PASS')
 # ---- Header for data logs ----
-logging.info("\n==================== ALERT LOGS ====================")
+logging.info("\n==================== ALERT LOGS ===================")
 with smtplib.SMTP(host='smtp.gmail.com') as conn:
     conn.starttls()
     for user_msg in email_manager.emails:

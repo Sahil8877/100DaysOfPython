@@ -3,6 +3,7 @@ import datetime
 import logging
 import time
 import pyshorteners
+
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(levelname)s:%(message)s"
@@ -12,15 +13,19 @@ clean_flights = data_manager.flight_deal_checker()
 emails = {}
 
 if clean_flights:
-    
-    
     for flight in clean_flights:
         email = flight["user_email"]
         
+        # Inject HTML content-type headers so clients render images and styling
         if email not in emails:
-            emails[email] = "Subject:Checkout your flight deals!\n\n✈️ Cheap Flight Deals Found For You\n"
+            emails[email] = (
+                "Subject: Checkout your flight deals!\n"
+                "MIME-Version: 1.0\n"
+                "Content-Type: text/html; charset=utf-8\n\n"
+                "<h2 style='color: #2c3e50;'>✈️ Cheap Flight Deals Found For You</h2>\n"
+            )
 
-        route = f'{flight["departure"]["name"]} → {flight["arrival"]["name"]}'
+        route = f'{flight["departure"]["name"]} &rarr; {flight["arrival"]["name"]}'
 
         # Departure & arrival datetime objects
         dep_dt = datetime.datetime.strptime(flight["departure"]["time"], "%Y-%m-%d %H:%M")
@@ -32,37 +37,52 @@ if clean_flights:
         # ---- Layover info ----
         layover_text = ""
         if "layovers" in flight and flight["layovers"]:
-            layover_text += "\n  🛑 Layovers:\n"
+            layover_text += "<p><strong>🛑 Layovers:</strong></p><ul style='list-style-type: none;'>"
             for idx, layover in enumerate(flight["layovers"], start=1):
                 arr_time = datetime.datetime.strptime(layover["arrival_time"], "%Y-%m-%d %H:%M")
                 dep_time = datetime.datetime.strptime(layover["departure_time"], "%Y-%m-%d %H:%M")
                 duration_hrs = round((dep_time - arr_time).total_seconds()/3600, 1)
         
+                # Inline HTML to show Layover Airline Logo and Name
                 layover_text += (
-            f"      Arrival: {arr_time.strftime('%H:%M')}\n"
-            f"      ↓ {layover['airport']} (⏱ {duration_hrs} hrs)\n"
-            f"      Depart: {dep_time.strftime('%H:%M')}\n"
-        )
+                    f"<li style='margin-bottom: 12px;'>"
+                    f"&nbsp;&nbsp;Arrival: {arr_time.strftime('%H:%M')} <br>"
+                    f"&nbsp;&nbsp;&darr; <strong>{layover['airport']}</strong> (⏱ {duration_hrs} hrs) <br>"
+                    f"&nbsp;&nbsp;Depart: {dep_time.strftime('%H:%M')} | "
+                    f"<img src='{layover['airline_logo']}' width='20' height='20' style='vertical-align: middle; border-radius: 4px;'> "
+                    f"<strong>{layover['airline']}</strong>"
+                    f"</li>"
+                )
+            layover_text += "</ul>"
         else:
-            layover_text = "✈️ Direct Flight\n"
+            layover_text = "<p>✈️ <strong>Direct Flight</strong></p>"
 
-        # Build the email
+        # Build the HTML email
         emails[email] += f"""
--> Route: {route}
+        <hr style="border: 1px solid #eee;">
+        <h4 style="margin-bottom: 5px;">&rarr; Route: {route}</h4>
 
-{dep_date_time}
-🛫 Departure: {flight['departure']['name']}
+        <p style="margin-top: 5px;">
+        <strong>{dep_date_time}</strong><br>
+        🛫 <strong>Departure:</strong> {flight['departure']['name']} <br>
+        <img src='{flight['airline_logo']}' width='20' height='20' style='vertical-align: middle; border-radius: 4px;'> 
+        <strong>{flight['airline']}</strong>
+        </p>
 
-{layover_text}
-🛬 Arrival: {flight['arrival']['name']}
-{arr_date_time}
+        {layover_text}
 
-💰 £{flight['price']} | ⏱ {round(flight['duration']/60,1)} hrs
+        <p>🛬 <strong>Arrival:</strong> {flight['arrival']['name']}<br>
+        <strong>{arr_date_time}</strong></p>
 
-🔗 Book Now: {pyshorteners.Shortener().tinyurl.short(f"{flight['booking_link']}")}
+        <p style="font-size: 16px;">
+        💰 <strong>&pound;{flight['price']}</strong> | ⏱ {round(flight['duration']/60,1)} hrs
+        </p>
 
-------------------------------------------------
-"""
+        <p style="font-size: 16px;">
+        🔗 <strong><a href='{pyshorteners.Shortener().tinyurl.short(flight['booking_link'])}' style='color: #2980b9;'>Book Now</a></strong>
+        </p>
+        <br>
+        """
         time.sleep(2)
 else:
     print("No Flight Data Found To Alert!")
