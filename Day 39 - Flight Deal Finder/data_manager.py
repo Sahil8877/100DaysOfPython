@@ -10,14 +10,14 @@ logging.basicConfig(
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("requests").setLevel(logging.WARNING)
 
-print("\nData Logs:")
+
 
 target_data = sheets_data.sheets_data_list
 
 def flight_deal_checker():
     flight_deal = []
     best_flights_data = flight_search.search_result()
-
+    print("\nData Logs:")
     for idx, targets in enumerate(target_data):
         if "best_flights" not in best_flights_data[idx]:
             print(f"No flights found for {targets['user_email']}")

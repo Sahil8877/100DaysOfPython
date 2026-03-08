@@ -4,7 +4,7 @@ import os
 import logging
 sender = os.getenv('SENDER_EMAIL')
 password = os.getenv('SENDER_EMAIL_PASS')
-
+print("\nALERT LOGS:")
 with smtplib.SMTP(host='smtp.gmail.com') as conn:
     conn.starttls()
     for user_msg in email_manager.emails:

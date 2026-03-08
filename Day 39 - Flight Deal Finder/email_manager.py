@@ -12,7 +12,7 @@ clean_flights = data_manager.flight_deal_checker()
 emails = {}
 
 if clean_flights:
-    print("\nALERT LOGS:")
+    
     
     for flight in clean_flights:
         email = flight["user_email"]
