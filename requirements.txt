@@ -4,3 +4,5 @@ requests
 dotenv
 pyshorteners
 serpapi
+google-search-results
+logging
