@@ -16,7 +16,7 @@ def search_result():
             "engine": "google_flights",
             "departure_id": target['departure_code'],
             "arrival_id": target['destination_code'],
-            "outbound_date": search_date,
+            "outbound_date": search_date.strftime("%Y-%m-%d"),
             "currency": "GBP",
             "hl": "en", #language
             "gl": 'uk', #country
@@ -29,8 +29,8 @@ def search_result():
             
             best_flights.append(result)
             print(search.json())
-        except:
-            print("There was an error :",search.get_response())
+        except Exception as e:
+            print("Error:", e)
 
     return best_flights
 
