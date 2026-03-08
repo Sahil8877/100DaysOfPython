@@ -32,21 +32,17 @@ if clean_flights:
         # ---- Layover info ----
         layover_text = ""
         if "layovers" in flight and flight["layovers"]:
-            layover_text += "  🛑 Layovers:\n"
-            for layover in flight["layovers"]:
-                layover_airport = layover["airport"]
-
-                layover_arr_dt = datetime.datetime.strptime(layover["arrival_time"], "%Y-%m-%d %H:%M")
-                layover_dep_dt = datetime.datetime.strptime(layover["departure_time"], "%Y-%m-%d %H:%M")
-
-                layover_arr_time = layover_arr_dt.strftime("%H:%M")
-                layover_dep_time = layover_dep_dt.strftime("%H:%M")
-
-                layover_duration = round((layover_dep_dt - layover_arr_dt).total_seconds() / 3600, 1)
-
-                layover_text += f"      Arrival: {layover_arr_time}\n"
-                layover_text += f"    ↓ {layover_airport}: (⏱ {layover_duration} hrs)\n"
-                layover_text += f"      Depart: {layover_dep_time}\n"
+            layover_text += "\n  🛑 Layovers:\n"
+            for idx, layover in enumerate(flight["layovers"], start=1):
+                arr_time = datetime.strptime(layover["arrival_time"], "%Y-%m-%d %H:%M")
+                dep_time = datetime.strptime(layover["departure_time"], "%Y-%m-%d %H:%M")
+                duration_hrs = round((dep_time - arr_time).total_seconds()/3600, 1)
+        
+                layover_text += (
+            f"      Arrival: {arr_time.strftime('%H:%M')}\n"
+            f"      ↓ {layover['airport']} (⏱ {duration_hrs} hrs)\n"
+            f"      Depart: {dep_time.strftime('%H:%M')}\n"
+        )
         else:
             layover_text = "✈️ Direct Flight\n"
 
