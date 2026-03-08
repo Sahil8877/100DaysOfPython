@@ -8,6 +8,7 @@ logging.basicConfig(
 sheets_data = requests.get(url=f"https://api.sheety.co/2a738664cb10b9ea4971b2ff1892cbd3/flightDealData/sheet1")
 sheets_data_list = []
 sheets_data_json = sheets_data.json()
+print(sheets_data.raise_for_status())
 print("\nSheets Data:")
 for data in sheets_data_json['sheet1']:
     try:
