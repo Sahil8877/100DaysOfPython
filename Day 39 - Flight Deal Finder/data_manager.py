@@ -2,6 +2,7 @@ import sheets_data
 import flight_search
 import logging
 
+# Configure logging
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(levelname)s:%(message)s"
@@ -10,17 +11,18 @@ logging.basicConfig(
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("requests").setLevel(logging.WARNING)
 
-
-
 target_data = sheets_data.sheets_data_list
 
 def flight_deal_checker():
     flight_deal = []
     best_flights_data = flight_search.search_result()
-    print("\nData Logs:")
+
+    # ---- Header for data logs ----
+    logging.info("\n==================== DATA LOGS ====================")
+
     for idx, targets in enumerate(target_data):
         if "best_flights" not in best_flights_data[idx]:
-            print(f"No flights found for {targets['user_email']}")
+            logging.info(f"No flights found for {targets['user_email']}")
             continue
 
         data = best_flights_data[idx].get("best_flights", [])
@@ -54,7 +56,6 @@ def flight_deal_checker():
 
                 # ---- Layovers ----
                 layovers = []
-
                 if 'layovers' in flight_options and flight_options['layovers']:
                     for i, l in enumerate(flight_options['layovers']):
                         layovers.append({
@@ -77,7 +78,7 @@ def flight_deal_checker():
                     "layover_count": layover
                 })
             else:
-                # ---- Matched flights log ----
+                # ---- Rejected flights log ----
                 logging.info(
                     f"REJECTED | {targets['user_email']} | "
                     f"{segments[0]['departure_airport']['id']}→{segments[-1]['arrival_airport']['id']} | "
