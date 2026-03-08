@@ -27,10 +27,8 @@ def flight_deal_checker():
         for flight_options in data:
 
             segments = flight_options['flights']
-            if 'layovers' not in flight_options:
-                layover = "No"
-            else:
-                layover = targets['layover_count']
+          
+            layover = max(len(segments) - 1, 0)
 
             logging.info(
             f"Requested | {targets['user_email']} | "
@@ -58,7 +56,8 @@ def flight_deal_checker():
                     layovers.append({
                         "airport": segments[i]['arrival_airport']['name'],
                         "arrival_time": segments[i]['arrival_airport']['time'],
-                        "departure_time": segments[i+1]['departure_airport']['time']
+                        "departure_time": segments[i+1]['departure_airport']['time'],
+                        "duration": round(int(flight_options['layovers'][i]['duration']),1),
                     })
 
                 flight_deal.append({

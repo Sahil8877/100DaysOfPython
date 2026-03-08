@@ -4,6 +4,8 @@ env:
     SENDER_EMAIL: ${{secrets.SENDER_EMAIL}}
     SENDER_EMAIL_PASS: ${{secrets.SENDER_EMAIL_PASSWORD}}
     SERP_API_KEY: ${{secrets.SERP_API_KEY}}
+    SHEETS_URL_FLIGHT_DEAL: ${{secrets.SHEETS_URL_FLIGHT_DEAL}}
+
 on:
   
   # The Cron Schedule

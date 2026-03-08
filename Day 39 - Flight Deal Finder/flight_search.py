@@ -29,14 +29,12 @@ def search_result():
             result = search.get_dict()
 
             result = search.get_dict()
-            print("SERP RESULT:", result)
+            # print("SERP RESULT:", result)
             best_flights.append(result)
 
         except Exception as e:
             print("Error:", e)
 
     return best_flights
-
-search_result()
 
 
