@@ -16,7 +16,7 @@ if clean_flights:
     for flight in clean_flights:
         email = flight["user_email"]
         
-        # Inject HTML content-type headers so clients render images and styling
+        # HTML content
         if email not in emails:
             emails[email] = (
                 "Subject: Checkout your flight deals!\n"

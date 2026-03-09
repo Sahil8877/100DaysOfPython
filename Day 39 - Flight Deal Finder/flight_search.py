@@ -34,7 +34,7 @@ def search_result():
         # Group results for this specific target
         target_results = []
 
-        # Failsafe in case an empty email somehow bypasses sheets_data.py
+        # check empty email from sheets_data.py
         if not target.get("user_email", "").strip():
             best_flights.append(target_results)
             continue
@@ -62,7 +62,7 @@ def search_result():
                         arrival_code_match = row['enterYourArrivalAirportCode. [resourceInDescription]'].strip().upper() == target['destination_code'].upper()
 
                         # parse Sheety date to standard format
-                        sheety_date = datetime.datetime.strptime(row['yourDepartureDate ?'], '%m/%d/%Y').strftime('%Y-%m-%d')
+                        sheety_date = datetime.datetime.strptime(row['specifyAFlightDeadline.'], '%m/%d/%Y').strftime('%Y-%m-%d')
                         date_match = sheety_date == target['departure_date']
 
                         if email_match and departure_code_match and arrival_code_match and date_match:
@@ -127,7 +127,6 @@ def search_result():
 
         except Exception as e:
             print("Error:", e)
-            # Append whatever we got so far (or empty list) to preserve index
             best_flights.append(target_results)
             
     return best_flights

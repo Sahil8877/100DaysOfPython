@@ -1,7 +1,7 @@
 import sheets_data
 import flight_search
 import logging
-import pprint
+import urllib.parse
 
 # Configure logging
 logging.basicConfig(
@@ -16,7 +16,6 @@ target_data = sheets_data.sheets_data_list
 
 def flight_deal_checker():
     flight_deals = []
-    # This contains a list of lists (each sublist represents all dates searched for one target)
     best_flights_data = flight_search.search_result()
     logging.debug(f"Total flight search targets processed: {len(best_flights_data)}")
 
@@ -34,9 +33,8 @@ def flight_deal_checker():
              continue
 
         for data in target_search_results:
+            # BEST FLIGHTS
             flight_options_list = data.get('best_flights') or []
-            
-            # Grab the search date here so we can use it for ALL logs (No Flights, Requested, Accepted, Rejected)
             search_date = data.get('search_parameters', {}).get('outbound_date', 'Unknown Date')
 
             if not flight_options_list:
@@ -58,30 +56,40 @@ def flight_deal_checker():
                 layover_count = max(len(segments) - 1, 0)
 
                 if price is None:
-                    logging.warning("Flight option missing price, skipping")
                     continue
 
-                # Added {search_date} to the REQUESTED log
                 logging.info(
-                    f"REQUESTED | {targets['user_email']} | "
+                    f"VERYFING | {targets['user_email']} | "
                     f"{segments[0]['departure_airport']['id']}→{segments[-1]['arrival_airport']['id']} | {search_date} | "
                     f"£{price} | {total_duration}min | {layover_count} stops"
                 )
 
+                # Check target limits (Price, Duration, and Layovers)
                 price_ok = price <= targets.get('price_target', float('inf'))
                 duration_ok = total_duration <= targets.get('duration_target', float('inf'))
+                layover_ok = layover_count <= targets.get('layover_count', float('inf'))
 
-                if price_ok and duration_ok:
-                    # Added {search_date} to the ACCEPTED log
+                if price_ok and duration_ok and layover_ok:
                     logging.info(
                         f"ACCEPTED | {targets['user_email']} | "
                         f"{segments[0]['departure_airport']['id']}→{segments[-1]['arrival_airport']['id']} | {search_date} | "
                         f"£{price} | {total_duration}min | {layover_count} stops"
                     )
+
+                    # GOOGLE FLIGHTS URL
+                    dest = targets['destination_code']
+                    dep = targets['departure_code']
                     
+                    # query with param for type= "one way" and sets exact dates/airports
+                    search_query = f"Flights from {dep} to {dest} on {search_date} one way"
+                    
+                    # Encode spaces to %20
+                    encoded_query = urllib.parse.quote(search_query)
+                    custom_booking_link = f"https://www.google.com/travel/flights?q={encoded_query}"
+                    
+                    # Get layover details
                     layovers = []
                     for i, l in enumerate(flight_options.get('layovers', [])):
-                        # segments[i+1] represents the flight departing the layover
                         if i + 1 < len(segments):
                             layovers.append({
                                 "airport": l.get('name'),
@@ -100,18 +108,20 @@ def flight_deal_checker():
                         "arrival": segments[-1]['arrival_airport'],
                         "price": price,
                         "duration": total_duration,
-                        "booking_link": data.get("search_metadata", {}).get("google_flights_url"),
+                        "booking_link": custom_booking_link,
                         "booking_token": flight_options.get('booking_token'),
                         "user_email": targets['user_email'],
                         "layover_count": layover_count
                     })
                 else:
-                    # Added {search_date} to the REJECTED log
                     logging.info(
                         f"REJECTED | {targets['user_email']} | "
                         f"{segments[0]['departure_airport']['id']}→{segments[-1]['arrival_airport']['id']} | {search_date} | "
                         f"£{price} | {total_duration}min | {layover_count} stops"
                     )
 
-    logging.debug(f"\nTotal flight deals found: {len(flight_deals)}")
+    # Sort the final extracted deals by price
+    flight_deals = sorted(flight_deals, key=lambda x: x['price'])
+    
+    logging.info(f"\nTotal flight deals found: {len(flight_deals)}")
     return flight_deals
