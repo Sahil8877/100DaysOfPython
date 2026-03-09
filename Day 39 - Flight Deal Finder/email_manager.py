@@ -22,7 +22,7 @@ if clean_flights:
                 "Subject: Checkout your flight deals!\n"
                 "MIME-Version: 1.0\n"
                 "Content-Type: text/html; charset=utf-8\n\n"
-                "<h2 style='color: #2c3e50;'>✈️ Cheap Flight Deals Found For You</h2>\n"
+                "<h2 style='color: #2c3e50;'>✈️ Flight Deals Found For You</h2>\n"
             )
 
         route = f'{flight["departure"]["name"]} &rarr; {flight["arrival"]["name"]}'
