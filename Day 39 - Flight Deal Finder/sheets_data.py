@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s:%(message
 url = os.getenv('SHEETS_URL_FLIGHT_DEAL')
 
 headers = {
-    "User-Agent": "Mozilla/5.0"
+"User-Agent": "Mozilla/5.0"
 }
 
 response = requests.get(url, headers=headers)
@@ -22,10 +22,6 @@ sheets_data_list = []
 
 for data in data_json.get("sheet1", []):
     
-    # --- DEBUG PRINT: Let's see exactly what Sheety sees for this row ---
-    print("\n[DEBUG] Raw row data from Sheety:", data)
-    
-    # We strip whitespace just in case the email was entered with a hidden space
     email = data.get("emailAddress", "")
     if isinstance(email, str):
         email = email.strip()
