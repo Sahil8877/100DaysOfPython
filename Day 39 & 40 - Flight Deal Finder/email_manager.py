@@ -83,6 +83,6 @@ if clean_flights:
         </p>
         <br>
         """
-        time.sleep(2)
+        time.sleep(5)
 else:
     print("No Flight Data Found To Alert!")
