@@ -2,6 +2,8 @@ import sheets_data
 import flight_search
 import logging
 import urllib.parse
+import requests
+import os
 
 # Configure logging
 logging.basicConfig(
@@ -14,16 +16,34 @@ logging.getLogger("requests").setLevel(logging.WARNING)
 
 target_data = sheets_data.sheets_data_list
 
+def update_lowest_price_in_sheet(row_id, new_price):
+    """Updates sheet1 with the new lowest price so we don't spam the user tomorrow"""
+    
+    base_url = os.getenv('SHEETS_URL_FLIGHT_DEAL') 
+    
+    update_url = f"{base_url}/{row_id}" 
+    
+    payload = {
+        "sheet1": {
+            "lowestPriceFound": new_price 
+        }
+    }
+    try:
+        response = requests.put(url=update_url, json=payload)
+        if response.status_code == 200:
+            logging.info(f"✅ Sheet Updated! New Lowest Price for Row {row_id} is now £{new_price}")
+        else:
+            logging.warning(f"Failed to update sheet price: {response.text}")
+    except Exception as e:
+        logging.error(f"Error updating sheet price: {e}")
+
 def flight_deal_checker():
     flight_deals = []
     best_flights_data = flight_search.search_result()
-    logging.debug(f"Total flight search targets processed: {len(best_flights_data)}")
 
     for idx, targets in enumerate(target_data):
-        logging.debug(f"\nProcessing target index {idx}: {targets['user_email']}")
 
         if idx >= len(best_flights_data):
-            logging.warning(f"No flight data for target index {idx}")
             continue
 
         target_search_results = best_flights_data[idx]
@@ -33,7 +53,6 @@ def flight_deal_checker():
              continue
 
         for data in target_search_results:
-            # BEST FLIGHTS
             flight_options_list = data.get('best_flights') or []
             search_date = data.get('search_parameters', {}).get('outbound_date', 'Unknown Date')
 
@@ -48,7 +67,6 @@ def flight_deal_checker():
                 segments = flight_options.get('flights') or []
 
                 if not segments:
-                    logging.warning("Flight option has no segments, skipping")
                     continue
 
                 price = flight_options.get('price')
@@ -59,12 +77,12 @@ def flight_deal_checker():
                     continue
 
                 logging.info(
-                    f"VERYFING | {targets['user_email']} | "
+                    f"REQUESTED | {targets['user_email']} | "
                     f"{segments[0]['departure_airport']['id']}→{segments[-1]['arrival_airport']['id']} | {search_date} | "
                     f"£{price} | {total_duration}min | {layover_count} stops"
                 )
 
-                # Check target limits (Price, Duration, and Layovers)
+                # STRICT CHECK: Only accept if price is strictly lower/equal to the target
                 price_ok = price <= targets.get('price_target', float('inf'))
                 duration_ok = total_duration <= targets.get('duration_target', float('inf'))
                 layover_ok = layover_count <= targets.get('layover_count', float('inf'))
@@ -76,18 +94,30 @@ def flight_deal_checker():
                         f"£{price} | {total_duration}min | {layover_count} stops"
                     )
 
-                    # GOOGLE FLIGHTS URL
+                   
+                    if price < targets.get('price_target'):
+                        update_lowest_price_in_sheet(targets['row_id'], price)
+
+                    # 1. Format layover
+                    if layover_count == 0:
+                        stops_text = "nonstop"
+                    elif layover_count == 1:
+                        stops_text = "1 stop"
+                    else:
+                        stops_text = f"{layover_count} stops"
+
+                    # 2. Duration buffer
+                    max_hours = int(total_duration / 60) + 1
+                    
+                    # 3. Airline
+                    airline = segments[0].get('airline', '')
+
                     dest = targets['destination_code']
                     dep = targets['departure_code']
-                    
-                    # query with param for type= "one way" and sets exact dates/airports
                     search_query = f"Flights from {dep} to {dest} on {search_date} one way"
-                    
-                    # Encode spaces to %20
                     encoded_query = urllib.parse.quote(search_query)
                     custom_booking_link = f"https://www.google.com/travel/flights?q={encoded_query}"
                     
-                    # Get layover details
                     layovers = []
                     for i, l in enumerate(flight_options.get('layovers', [])):
                         if i + 1 < len(segments):
@@ -113,6 +143,9 @@ def flight_deal_checker():
                         "user_email": targets['user_email'],
                         "layover_count": layover_count
                     })
+                    
+                    
+                    break 
                 else:
                     logging.info(
                         f"REJECTED | {targets['user_email']} | "
@@ -120,8 +153,6 @@ def flight_deal_checker():
                         f"£{price} | {total_duration}min | {layover_count} stops"
                     )
 
-    # Sort the final extracted deals by price
     flight_deals = sorted(flight_deals, key=lambda x: x['price'])
-    
     logging.info(f"\nTotal flight deals found: {len(flight_deals)}")
     return flight_deals

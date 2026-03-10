@@ -27,10 +27,22 @@ for data in data_json.get("sheet1", []):
         email = email.strip()
 
     if email:
+        # 1. Grab the original form price
+        original_price = data.get("priceTarget", float('inf'))
+        
+        # 2. Grab the dumb column price
+        lowest_found = data.get("lowestPriceFound")
+
+        # 3. YOUR LOGIC: If dumb column is blank, use original. Else, use dumb column.
+        if lowest_found == "" or lowest_found is None:
+            current_target = float(original_price)
+        else:
+            current_target = float(lowest_found)
+
         sheets_data_list.append({
             "destination_code": data["destinationCode"],
             "departure_code": data["departureCode"],
-            "price_target": int(data["priceTarget"]),
+            "price_target": current_target, 
             "duration_target": int(data["durationTarget"]),
             "layover_count": data["layoverCount"],
             "user_email": email,
