@@ -65,7 +65,7 @@ def flight_deal_checker():
                 )
 
                 # Check target limits (Price, Duration, and Layovers)
-                price_ok = price <= targets.get('price_target', float('inf'))
+                price_ok = price < targets.get('price_target', float('inf'))
                 duration_ok = total_duration <= targets.get('duration_target', float('inf'))
                 layover_ok = layover_count <= targets.get('layover_count', float('inf'))
 
