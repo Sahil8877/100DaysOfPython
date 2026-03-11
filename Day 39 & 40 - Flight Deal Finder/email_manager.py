@@ -79,7 +79,7 @@ if clean_flights:
         </p>
 
         <p style="font-size: 16px;">
-        🔗 <strong><a href='{pyshorteners.Shortener().tinyurl.short(flight['booking_link'],timeout=60)}' style='color: #2980b9;'>Book Now</a></strong>
+        🔗 <strong><a href='{pyshorteners.Shortener(timeout=60).tinyurl.short(flight['booking_link'])}' style='color: #2980b9;'>Book Now</a></strong>
         </p>
         <br>
         """
