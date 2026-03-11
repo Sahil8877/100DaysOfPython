@@ -27,10 +27,24 @@ for data in data_json.get("sheet1", []):
         email = email.strip()
 
     if email:
+        # --- THE FIX: SMART PRICE LOGIC ---
+        # Grab original form target (e.g., 900)
+        original_price = data.get("priceTarget", float('inf'))
+        
+        # Grab the lowest price Python has found so far (e.g., 463)
+        lowest_found = data.get("lowestPriceFound")
+
+        # If we have a lower price recorded, use it! Otherwise, use the original budget.
+        if lowest_found is not None and str(lowest_found).strip() != "":
+            current_target = float(lowest_found)
+        else:
+            current_target = float(original_price)
+        # ----------------------------------
+
         sheets_data_list.append({
             "destination_code": data["destinationCode"],
             "departure_code": data["departureCode"],
-            "price_target": int(data["priceTarget"]),
+            "price_target": current_target, # <--- Now passing the smartest price to the checker
             "duration_target": int(data["durationTarget"]),
             "layover_count": data["layoverCount"],
             "user_email": email,
