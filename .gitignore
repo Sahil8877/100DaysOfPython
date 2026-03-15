@@ -2,4 +2,6 @@ extra.py
 mail_sent_to_uk.txt
 .env
 *.pyc
-*.DS_Store
+.DS_Store
+venv/
+__pycache__/
