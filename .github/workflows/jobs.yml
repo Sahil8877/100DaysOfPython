@@ -36,6 +36,6 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run script
-        run: python 'Day 36 - Job Search API/mail_sender.py'
+        run: python 'Day 36 - Job Search API/Intermediate/mail_sender.py'
         
       
