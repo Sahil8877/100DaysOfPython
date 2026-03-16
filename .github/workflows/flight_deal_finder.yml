@@ -38,4 +38,4 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run script
-        run: python 'Day 39 & 40 - Flight Deal Finder/Intermediate/main.py'
+        run: python 'Intermediate/Day 39 & 40 - Flight Deal Finder/main.py'

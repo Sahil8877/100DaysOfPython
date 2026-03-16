@@ -36,7 +36,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run script
-        run: python 'Day 32 - Email Sender/Intermediate/main.py'
+        run: python 'Intermediate/Day 32 - Email Sender/main.py'
       
       - name: Push changes to Git
         run: |

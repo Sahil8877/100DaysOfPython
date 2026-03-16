@@ -30,7 +30,7 @@ jobs:
         run: pip install -r requirements.txt 
         
       - name: send-email
-        run: python3 'Day 35 - Rain Alert System/Intermediate/send_email.py'
+        run: python3 'Intermediate/Day 35 - Rain Alert System/send_email.py'
         
       - name: Push changes to Git
         run: |
