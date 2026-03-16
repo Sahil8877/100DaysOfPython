@@ -5,3 +5,4 @@ mail_sent_to_uk.txt
 .DS_Store
 venv/
 __pycache__/
+.vscode
