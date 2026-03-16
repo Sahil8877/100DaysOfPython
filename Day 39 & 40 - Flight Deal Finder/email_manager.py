@@ -83,9 +83,5 @@ if clean_flights:
         </p>
         <br>
         """
-<<<<<<< HEAD
-        time.sleep(5)
-=======
->>>>>>> 7284de76a21eb6c729f654f2022bc01f5b9ea56b
 else:
     print("No Flight Data Found To Alert!")
