@@ -6,3 +6,5 @@ mail_sent_to_uk.txt
 venv/
 __pycache__/
 .vscode
+token.json
+client_secrets_file.json
