@@ -9,7 +9,7 @@ load_dotenv()
 import os
 from datetime import datetime
 
-CLIENT_SECRETS_FILE = './Intermediate/Day 46 - Music Playlist Downloader/client_secrets_file.json'
+CLIENT_SECRETS_FILE = './Intermediate/Day 46 - Music Playlist Automation/client_secrets_file.json'
 SCOPES = ['https://www.googleapis.com/auth/youtube']
 API_SERVICE_NAME = 'youtube'
 API_VERSION = 'v3'
@@ -18,8 +18,8 @@ API_VERSION = 'v3'
 def get_authenticated_service():
     creds = None
     # Load saved token if exists
-    if os.path.exists("Intermediate/Day 46 - Music Playlist Downloader/token.json"):
-        creds = Credentials.from_authorized_user_file("Intermediate/Day 46 - Music Playlist Downloader/token.json", SCOPES)
+    if os.path.exists("./Intermediate/Day 46 - Music Playlist Automation/token.json"):
+        creds = Credentials.from_authorized_user_file("./Intermediate/Day 46 - Music Playlist Automation/token.json", SCOPES)
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
     if not creds or not creds.valid:
@@ -30,7 +30,7 @@ def get_authenticated_service():
             prompt="consent"
         )
         # Save token for reuse
-        with open("Intermediate/Day 46 - Music Playlist Downloader/token.json", "w") as token:
+        with open("./Intermediate/Day 46 - Music Playlist Automation/token.json", "w") as token:
             token.write(creds.to_json())
 
     return build(API_SERVICE_NAME, API_VERSION, credentials = creds)
@@ -48,7 +48,7 @@ def add_playlist(youtube):
             }
         }
         ).execute()
-    with open('Intermediate/Day 46 - Music Playlist Downloader/playlist_id.txt','w') as file:
+    with open('./Intermediate/Day 46 - Music Playlist Automation/playlist_id.txt','w') as file:
         file.write(response['id'])
         print('New playlist ID: %s' % response['id'])
 
@@ -123,7 +123,7 @@ def get_playlist_items(youtube,playlist_id):
 
 youtube = get_authenticated_service() 
 try:
-    with open('Intermediate/Day 46 - Music Playlist Downloader/playlist_id.txt','r') as file:
+    with open('./Intermediate/Day 46 - Music Playlist Automation/playlist_id.txt','r') as file:
         playlist_id = file.readline() #Read playlist ID stored in text file
         list_of_playlist_videoIDs_itemIDs = get_playlist_items(youtube,playlist_id) #get existing song IDs to compare
         list_of_playlist_videoID = [item_id.get('video_id') for item_id in list_of_playlist_videoIDs_itemIDs]
