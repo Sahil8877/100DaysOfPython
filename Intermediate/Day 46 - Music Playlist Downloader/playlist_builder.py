@@ -73,7 +73,15 @@ def add_song_to_playlist(youtube,playlist_id,list_of_new_songIDs):
         print("No update to your Playlist.")
 
 def delete_song_from_playlist(youtube,list_of_new_songIDs,list_of_playlist_itemID):
-    for item_id in list_of_playlist_itemID[:len(list_of_new_songIDs)]:
+    MAX_PLAYLIST_SIZE = 10
+    total_items_in_playlist = len(list_of_playlist_itemID)
+    total_new_songs_to_add = len(list_of_new_songIDs)
+    space_available = MAX_PLAYLIST_SIZE - total_items_in_playlist
+    if total_new_songs_to_add > space_available:
+        delete_count = total_new_songs_to_add - space_available
+    else:
+        delete_count = 0
+    for item_id in list_of_playlist_itemID[:delete_count]:
         try:
             youtube.playlistItems().delete(id = item_id).execute()
             print('Deleted Song ID : ',item_id)
