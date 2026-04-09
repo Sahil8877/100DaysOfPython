@@ -9,7 +9,6 @@ class GetProductData:
             "User-Agent": "Mozilla/5.0",
             "Accept-Language": "en-GB,en;q=0.8"
         }
-
         response = self.session.get(self.url, headers=self.headers)
 
         if response.status_code != 200:
@@ -32,7 +31,7 @@ class GetProductData:
         return title.text.strip() if title else None
 
 
-product = GetProductData("https://www.amazon.co.uk/PlayStation-5-Digital-Console-Slim/dp/B0CM9VKQ5N/ref=pd_vtp_d_sccl_1_1/521-8021042-6135048?pd_rd_w=CqBbb&content-id=amzn1.sym.e1b012f9-a2d8-4786-8113-bd0f31ac121d&pf_rd_p=e1b012f9-a2d8-4786-8113-bd0f31ac121d&pf_rd_r=C8WFZ5GNJPCK8JKS9FNK&pd_rd_wg=JYrwQ&pd_rd_r=af51f9ce-13af-4ec5-96f4-e7404503492b&pd_rd_i=B0CM9VKQ5N&psc=1")
+product = GetProductData("https://www.amazon.co.uk/PlayStation-PS5-Pro-5-Console/dp/B0FR94FV8J/ref=sr_1_4?_encoding=UTF8&brr=1&content-id=amzn1.sym.cc5a8121-5dd2-4b00-be77-8ccc7730d8ef&dib=eyJ2IjoiMSJ9.MyD1pCDSo5QOHiScCzOOiI0ylZAK6NBmTbtx0C-dT_0qWquwqd7TkFUe-L9hY2rdPq1set0-NjiZy_E1J_Z2OrbBtMA4ph6FmOAdQ_SSH8kIPSYKTpFB3pN2bGqZ4UCgVymp51XURSLHySJ2XfQ_HOdPZaDEfe8hTon3fbtuGrsOzfhxUCj5eFuRN2P3fwsdn28xlESVeFH0_aFXhAVqlOtStqYCuoGCsKwOk3WeF-8.MJl4e-JPQ_LdReySIuG9a_Bxp8nilu_C5BLe8Ba3QM4&dib_tag=se&pd_rd_r=685b0165-3ead-45b4-9bab-7247dddc1db6&pd_rd_w=V4sQS&pd_rd_wg=h5tjM&qid=1775768596&rd=1&s=videogames&sr=1-4")
 
 print(product.parse_item_name())
 print(product.parse_price_data())
