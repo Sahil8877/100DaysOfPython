@@ -13,7 +13,7 @@ try:
             msg = f'Subject:Amazon Price Bot!\n\nThis a Price drop alert!\n\nItem : {product_data.product.parse_item_name()}\n\nNew price : {product_data.product.parse_price_data()}￡'
             sender_email = os.getenv('SENDER_EMAIL')
             sender_pass = os.getenv('SENDER_EMAIL_PASS')
-            receiver = 'sahils.8877@gmail.com'
+            receiver = os.getenv('RECEIVER_EMAIL')
             con.login(user=sender_email,password=sender_pass)
             con.sendmail(msg=msg.encode("utf-8"),from_addr=sender_email,to_addrs=receiver)
             print("Alert sent!")
