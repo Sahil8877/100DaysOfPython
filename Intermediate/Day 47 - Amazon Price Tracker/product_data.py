@@ -21,7 +21,7 @@ class GetProductData:
         if "captcha" in response.text.lower():
             raise Exception("Blocked by Amazon")
 
-        self.html_data = BeautifulSoup(response.content, "html.parser")
+        self.html_data = BeautifulSoup(response.text, "html.parser")
 
     def parse_price_data(self):
         try:
