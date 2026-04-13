@@ -36,6 +36,7 @@ jobs:
 
       - name: Run script
         run: python 'Intermediate/Day 47 - Amazon Price Tracker/send_email.py'
+      
       - name: Upload debug HTML
         uses: actions/upload-artifact@v4
         with:
