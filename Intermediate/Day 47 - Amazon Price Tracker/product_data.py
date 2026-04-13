@@ -14,7 +14,8 @@ class GetProductData:
             "Connection": "keep-alive",
         }
         response = self.session.get(self.url, headers=self.headers)
-
+        with open("github_debug.html", "w", encoding="utf-8") as f:
+                f.write(response.text)
         if response.status_code != 200:
             raise Exception("Failed to fetch page")
 
@@ -26,7 +27,9 @@ class GetProductData:
     def parse_price_data(self):
         try:
             price = self.html_data.select_one('.a-price .a-offscreen')
+            
             return float(price.text.replace('£', '').replace(',', ''))
+
         except:
             return None
 
