@@ -13,9 +13,9 @@ class GetProductData:
             "Referer": "https://google.com",
             "Connection": "keep-alive",
         }
-        response = self.session.get(self.url, headers=self.headers)
-        with open("github_debug.html", "w", encoding="utf-8") as f:
-                f.write(response.text)
+
+        response = self.session.get(url, headers=self.headers)
+
         if response.status_code != 200:
             raise Exception("Failed to fetch page")
 
