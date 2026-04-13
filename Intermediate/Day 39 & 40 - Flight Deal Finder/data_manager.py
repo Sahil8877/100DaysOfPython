@@ -82,13 +82,8 @@ def flight_deal_checker():
                     f"£{price} | {total_duration}min | {layover_count} stops"
                 )
 
-<<<<<<< HEAD
                 # STRICT CHECK: Only accept if price is strictly lower/equal to the target
                 price_ok = price <= targets.get('price_target', float('inf'))
-=======
-                # Check target limits (Price, Duration, and Layovers)
-                price_ok = price < targets.get('price_target', float('inf'))
->>>>>>> 7284de76a21eb6c729f654f2022bc01f5b9ea56b
                 duration_ok = total_duration <= targets.get('duration_target', float('inf'))
                 layover_ok = layover_count <= targets.get('layover_count', float('inf'))
 
