@@ -9,9 +9,7 @@ logging.info("\n==================== ALERT LOGS ===================")
 with smtplib.SMTP(host='smtp.gmail.com') as conn:
     conn.starttls()
     for user_msg in email_manager.emails:
-
         conn.login(user=sender,password=password)
-           
         conn.sendmail(
             msg=email_manager.emails[user_msg].encode("utf-8"),
             from_addr=sender,
