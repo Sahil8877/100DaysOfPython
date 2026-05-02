@@ -8,3 +8,5 @@ __pycache__/
 .vscode
 token.json
 client_secrets_file.json
+bot_profile/
+gym_profile/
