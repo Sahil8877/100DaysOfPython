@@ -7,64 +7,49 @@ load_dotenv()
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s:%(message)s")
 
-url = os.getenv('SHEETS_URL_FLIGHT_DEAL')
+SHEETS_URL = os.getenv('SHEETS_URL_FLIGHT_DEAL')
+HEADERS = {"User-Agent": "Mozilla/5.0"}
 
-headers = {
-"User-Agent": "Mozilla/5.0"
-}
+def load_targets():
+    """Fetch and parse flight deal targets from Google Sheet."""
+    if not SHEETS_URL:
+        logging.error("SHEETS_URL_FLIGHT_DEAL not set in environment")
+        return []
 
-response = requests.get(url, headers=headers)
-response.raise_for_status()
+    try:
+        response = requests.get(SHEETS_URL, headers=HEADERS, timeout=10)
+        response.raise_for_status()
+        data_json = response.json()
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to fetch sheet data: {e}")
+        return []
 
-data_json = response.json()
+    targets = []
+    for row in data_json.get("sheet1", []):
+        email = (row.get("emailAddress") or "").strip()
+        if not email:
+            logging.warning(f"Skipping row without email: {row.get('id')}")
+            continue
 
-sheets_data_list = []
+        # Original price from form, and the 'lowestPriceFound' column (if any)
+        original_price = row.get("priceTarget", float('inf'))
+        lowest_found = row.get("lowestPriceFound")
 
-for data in data_json.get("sheet1", []):
-    
-    email = data.get("emailAddress", "")
-    if isinstance(email, str):
-        email = email.strip()
-
-    if email:
-        # 1. Grab the original form price
-        original_price = data.get("priceTarget", float('inf'))
-        
-        # 2. Grab the dumb column price
-        lowest_found = data.get("lowestPriceFound")
-
-        # 3. YOUR LOGIC: If dumb column is blank, use original. Else, use dumb column.
-        if lowest_found == "" or lowest_found is None:
+        if lowest_found in (None, ""):
             current_target = float(original_price)
         else:
             current_target = float(lowest_found)
 
-        sheets_data_list.append({
-            "destination_code": data["destinationCode"],
-            "departure_code": data["departureCode"],
-            "price_target": current_target, 
-            "duration_target": int(data["durationTarget"]),
-            "layover_count": data["layoverCount"],
+        targets.append({
+            "destination_code": row["destinationCode"],
+            "departure_code": row["departureCode"],
+            "price_target": current_target,
+            "duration_target": int(row["durationTarget"]),
+            "layover_count": row["layoverCount"],
             "user_email": email,
-            'departure_date': data['departureDate'],
-            'row_id' : data['id'],
+            "departure_date": row["departureDate"],
+            "row_id": row["id"],
         })
-    else:
-        logging.warning(f"NO EMAIL FOUND | {data.get('departureCode', 'N/A')}->{data.get('destinationCode', 'N/A')}")
-        
-        sheet1_row_id = data.get('id')
-        if sheet1_row_id:
-            target_row_id = int(sheet1_row_id) - 1
-            
-            if target_row_id > 1:
-                delete_url = os.getenv('SHEETS_FLIGHT_DEAL_DELETE_URL')
-                try:
-                    del_response = requests.delete(url=f"{delete_url}{target_row_id}")
-                    if del_response.status_code in [200, 204]:
-                        logging.info(f"Row {target_row_id} (Sheet1 ID: {sheet1_row_id}) deleted successfully due to missing email.")
-                    else:
-                        logging.warning(f"Failed to delete row {target_row_id}: {del_response.status_code} {del_response.text}")
-                except Exception as e:
-                    logging.error(f"Error deleting row {target_row_id}: {e}")
-            else:
-                logging.debug(f"Skipped deleting target row {target_row_id} (Sheet1 ID: {sheet1_row_id}) to protect sheet headers.")
+
+    logging.info(f"Loaded {len(targets)} valid targets from sheet")
+    return targets

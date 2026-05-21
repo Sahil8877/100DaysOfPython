@@ -1,158 +1,116 @@
-import sheets_data
-import flight_search
 import logging
 import urllib.parse
 import requests
 import os
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(levelname)s:%(name)s:%(message)s"
-)
-
+logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s:%(message)s")
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("requests").setLevel(logging.WARNING)
 
-target_data = sheets_data.sheets_data_list
-
 def update_lowest_price_in_sheet(row_id, new_price):
-    """Updates sheet1 with the new lowest price so we don't spam the user tomorrow"""
-    
-    base_url = os.getenv('SHEETS_URL_FLIGHT_DEAL') 
-    
-    update_url = f"{base_url}/{row_id}" 
-    
-    payload = {
-        "sheet1": {
-            "lowestPriceFound": new_price 
-        }
-    }
+    """Update the lowestPriceFound column in the flight deals sheet."""
+    base_url = os.getenv('SHEETS_URL_FLIGHT_DEAL')
+    if not base_url:
+        logging.error("SHEETS_URL_FLIGHT_DEAL not set")
+        return
+    update_url = f"{base_url}/{row_id}"
+    payload = {"sheet1": {"lowestPriceFound": new_price}}
     try:
-        response = requests.put(url=update_url, json=payload)
+        response = requests.put(update_url, json=payload, timeout=10)
         if response.status_code == 200:
-            logging.info(f"✅ Sheet Updated! New Lowest Price for Row {row_id} is now £{new_price}")
+            logging.info(f"✅ Sheet Updated! Row {row_id} new lowest price £{new_price}")
         else:
-            logging.warning(f"Failed to update sheet price: {response.text}")
+            logging.warning(f"Failed to update sheet: {response.text}")
     except Exception as e:
         logging.error(f"Error updating sheet price: {e}")
 
-def flight_deal_checker():
+def process_flight_deals(targets, search_results):
+    """
+    Filter and structure flight deals.
+    targets: list of target dicts (from sheets_data.load_targets())
+    search_results: list of SerpAPI result dicts (parallel to targets)
+    Returns list of structured flight deal dicts.
+    """
     flight_deals = []
-    best_flights_data = flight_search.search_result()
 
-    for idx, targets in enumerate(target_data):
-
-        if idx >= len(best_flights_data):
+    for idx, target in enumerate(targets):
+        if idx >= len(search_results) or not search_results[idx]:
             continue
 
-        target_search_results = best_flights_data[idx]
-        
-        if not target_search_results:
-             logging.info(f"NO FLIGHTS | API search results empty for {targets['user_email']}")
-             continue
+        result = search_results[idx]
+        flight_options = result.get('best_flights', []) or result.get('other_flights', [])
+        search_date = result.get('search_parameters', {}).get('outbound_date', 'Unknown')
 
-        for data in target_search_results:
-            flight_options_list = data.get('best_flights') or []
-            search_date = data.get('search_parameters', {}).get('outbound_date', 'Unknown Date')
+        if not flight_options:
+            logging.info(f"NO FLIGHTS | {target['user_email']} | {target['departure_code']}→{target['destination_code']} | {search_date}")
+            continue
 
-            if not flight_options_list:
-                logging.info(
-                    f"NO FLIGHTS | {targets['user_email']} | "
-                    f"{targets['departure_code']}→{targets['destination_code']} | {search_date}"
-                )
+        # Sort by price (cheapest first) to ensure we pick the best
+        flight_options.sort(key=lambda x: x.get('price', float('inf')))
+
+        for flight in flight_options:
+            segments = flight.get('flights', [])
+            if not segments:
                 continue
 
-            for flight_options in flight_options_list:
-                segments = flight_options.get('flights') or []
+            price = flight.get('price')
+            total_duration = flight.get('total_duration', float('inf'))
+            layover_count = max(len(segments) - 1, 0)
 
-                if not segments:
-                    continue
+            if price is None:
+                continue
 
-                price = flight_options.get('price')
-                total_duration = flight_options.get('total_duration', float('inf'))
-                layover_count = max(len(segments) - 1, 0)
+            # Log all found flights
+            logging.info(
+                f"FOUND | {target['user_email']} | {segments[0]['departure_airport']['id']}→{segments[-1]['arrival_airport']['id']} | {search_date} | "
+                f"£{price} | {total_duration}min | {layover_count} stops"
+            )
 
-                if price is None:
-                    continue
+            # Check constraints
+            if (price <= target['price_target'] and
+                total_duration <= target['duration_target'] and
+                layover_count <= target['layover_count']):
 
-                logging.info(
-                    f"REQUESTED | {targets['user_email']} | "
-                    f"{segments[0]['departure_airport']['id']}→{segments[-1]['arrival_airport']['id']} | {search_date} | "
-                    f"£{price} | {total_duration}min | {layover_count} stops"
-                )
+                logging.info(f"ACCEPTED | {target['user_email']} | £{price}")
 
-                # STRICT CHECK: Only accept if price is strictly lower/equal to the target
-                price_ok = price <= targets.get('price_target', float('inf'))
-                duration_ok = total_duration <= targets.get('duration_target', float('inf'))
-                layover_ok = layover_count <= targets.get('layover_count', float('inf'))
+                # Update sheet if new price is strictly lower
+                if price < target['price_target']:
+                    update_lowest_price_in_sheet(target['row_id'], price)
 
-                if price_ok and duration_ok and layover_ok:
-                    logging.info(
-                        f"ACCEPTED | {targets['user_email']} | "
-                        f"{segments[0]['departure_airport']['id']}→{segments[-1]['arrival_airport']['id']} | {search_date} | "
-                        f"£{price} | {total_duration}min | {layover_count} stops"
-                    )
+                # Build layover details
+                layovers = []
+                for i, layover in enumerate(flight.get('layovers', [])):
+                    if i + 1 < len(segments):
+                        layovers.append({
+                            "airport": layover.get('name'),
+                            "arrival_time": segments[i]['arrival_airport'].get('time'),
+                            "departure_time": segments[i+1]['departure_airport'].get('time'),
+                            "duration": round(float(layover.get('duration', 0)) / 60, 1),
+                            "airline": segments[i+1].get('airline', 'Unknown'),
+                            "airline_logo": segments[i+1].get('airline_logo', '')
+                        })
 
-                   
-                    if price < targets.get('price_target'):
-                        update_lowest_price_in_sheet(targets['row_id'], price)
+                # Booking link
+                query = f"Flights from {target['departure_code']} to {target['destination_code']} on {search_date} one way"
+                encoded_query = urllib.parse.quote(query)
+                booking_link = f"https://www.google.com/travel/flights?q={encoded_query}"
 
-                    # 1. Format layover
-                    if layover_count == 0:
-                        stops_text = "nonstop"
-                    elif layover_count == 1:
-                        stops_text = "1 stop"
-                    else:
-                        stops_text = f"{layover_count} stops"
+                flight_deals.append({
+                    "departure": segments[0]['departure_airport'],
+                    "airline": segments[0].get('airline', 'Unknown'),
+                    "airline_logo": segments[0].get('airline_logo', ''),
+                    "layovers": layovers,
+                    "arrival": segments[-1]['arrival_airport'],
+                    "price": price,
+                    "duration": total_duration,
+                    "booking_link": booking_link,
+                    "booking_token": flight.get('booking_token'),
+                    "user_email": target['user_email'],
+                    "layover_count": layover_count
+                })
 
-                    # 2. Duration buffer
-                    max_hours = int(total_duration / 60) + 1
-                    
-                    # 3. Airline
-                    airline = segments[0].get('airline', '')
 
-                    dest = targets['destination_code']
-                    dep = targets['departure_code']
-                    search_query = f"Flights from {dep} to {dest} on {search_date} one way"
-                    encoded_query = urllib.parse.quote(search_query)
-                    custom_booking_link = f"https://www.google.com/travel/flights?q={encoded_query}"
-                    
-                    layovers = []
-                    for i, l in enumerate(flight_options.get('layovers', [])):
-                        if i + 1 < len(segments):
-                            layovers.append({
-                                "airport": l.get('name'),
-                                "arrival_time": segments[i]['arrival_airport'].get('time'),
-                                "departure_time": segments[i + 1]['departure_airport'].get('time'),
-                                "duration": round(float(l.get('duration', 0)) / 60, 1),
-                                "airline": segments[i + 1].get('airline', 'Unknown Airline'),
-                                "airline_logo": segments[i + 1].get('airline_logo', '')
-                            })
-
-                    flight_deals.append({
-                        "departure": segments[0]['departure_airport'],
-                        "airline": segments[0].get('airline', 'Unknown Airline'),
-                        "airline_logo": segments[0].get('airline_logo', ''),
-                        "layovers": layovers,
-                        "arrival": segments[-1]['arrival_airport'],
-                        "price": price,
-                        "duration": total_duration,
-                        "booking_link": custom_booking_link,
-                        "booking_token": flight_options.get('booking_token'),
-                        "user_email": targets['user_email'],
-                        "layover_count": layover_count
-                    })
-                    
-                    
-                    break 
-                else:
-                    logging.info(
-                        f"REJECTED | {targets['user_email']} | "
-                        f"{segments[0]['departure_airport']['id']}→{segments[-1]['arrival_airport']['id']} | {search_date} | "
-                        f"£{price} | {total_duration}min | {layover_count} stops"
-                    )
-
-    flight_deals = sorted(flight_deals, key=lambda x: x['price'])
-    logging.info(f"\nTotal flight deals found: {len(flight_deals)}")
+    # Sort globally by price
+    flight_deals.sort(key=lambda x: x['price'])
+    logging.info(f"Total flight deals found: {len(flight_deals)}")
     return flight_deals
