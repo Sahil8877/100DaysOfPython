@@ -20,4 +20,4 @@ linkedin_bot.py
 *.bin
 *.pt
 *.pth
-*.ckpt
+*.ckpt*.gguf
