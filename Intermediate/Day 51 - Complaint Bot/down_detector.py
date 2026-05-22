@@ -1,0 +1,77 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chromium import options
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import undetected_chromedriver as uc
+import complain_writer
+import time
+
+options = uc.ChromeOptions()
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--window-size=1920,1080")
+options.add_argument("--disable-blink-features=AutomationControlled")
+
+driver = uc.Chrome(options=options, version_main=148)
+
+#********You can add a chrome********# 
+# user_data_dir = os.path.join(os.getcwd(), "complaint_bot")
+# chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
+
+webdriver_wait = WebDriverWait(driver,10)
+
+companies_to_check = [{'Apex Legends' : 'https://downdetector.co.uk/status/apex-legends/'},
+                      {'Virgin Media' : 'https://downdetector.co.uk/status/virgin-media/'}]
+
+def get_downdetector_data(list_of_companies):
+    down_today = {}
+    try:
+        for org_data in list_of_companies:
+            
+            for org_name in org_data:
+                driver.get(org_data.get(org_name))
+                webdriver_wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR,"#company-status")))
+
+                time.sleep(2)
+                try:
+                    cookie_button = driver.find_element(By.CSS_SELECTOR,"button[id^='onetrust-accept-btn-handler']")
+                    cookie_button.click()
+                except:
+                    pass
+
+                time.sleep(2)
+                banner_element = driver.find_element(By.CSS_SELECTOR,"#company-status")
+                banner_element_attr_color = banner_element.get_attribute('class')
+
+                if 'border-[var(--color-dd-red)]' in banner_element_attr_color:
+                    data_card_element = driver.find_element(By.CSS_SELECTOR,"div[aria-label='Most reported problems breakdown']")
+                    reported_problems = data_card_element.find_elements(By.CSS_SELECTOR,"div[role='listitem']")
+                    reported_data_dict = {}
+                    
+                    for reports in reported_problems:
+                        reported_data = reports.find_element(By.CSS_SELECTOR,".relative").text
+                        reported_text = reports.find_element(By.CSS_SELECTOR,"div.text-center").text
+                        reported_data_dict[reported_text] = reported_data
+
+                    down_today[org_name] = {'report': reported_data_dict, 'desc' : banner_element.text}
+
+                else:
+                    print(org_name, "has no major outage reported. ")
+        driver.quit()
+    except Exception as e:
+        print('Error',e)
+        driver.quit()
+
+    return down_today
+
+def downdetector_complainer(downdetector_data):
+    downdetector_complaints = []
+    for org,data in downdetector_data.items():
+        reports = ",".join([" " + report + " " + data['report'].get(report) for report in data['report']])
+        downdetector_complaints.append(f"{org} is down today, outage report by impact is as follows:{reports}.")
+    print(downdetector_complaints)
+    return downdetector_complaints
+
+complain_writer.response(downdetector_complainer(get_downdetector_data(companies_to_check)),"website down")
