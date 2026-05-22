@@ -15,7 +15,9 @@ steam/
 *.csv
 *.patch
 linkedin_bot.py
-<<<<<<< HEAD
-=======
-Day 51 - Complaint Bot
->>>>>>> 7d87a0cb1e1b8e02c262cfb89d0c2c7f22fc38a1
+# LLM models
+*.gguf
+*.bin
+*.pt
+*.pth
+*.ckpt
