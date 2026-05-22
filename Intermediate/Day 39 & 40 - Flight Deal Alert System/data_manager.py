@@ -108,7 +108,8 @@ def process_flight_deals(targets, search_results):
                     "user_email": target['user_email'],
                     "layover_count": layover_count
                 })
-
+            else:
+                logging.info(f"REJECTED | {target['user_email']} | {segments[0]['departure_airport']['id']}→{segments[-1]['arrival_airport']['id']} | {search_date} | £{price} | {total_duration}min | {layover_count} stops")
 
     # Sort globally by price
     flight_deals.sort(key=lambda x: x['price'])
