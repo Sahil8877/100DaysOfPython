@@ -36,7 +36,7 @@ chrome_version = get_chrome_major_version()
 driver = uc.Chrome(options=options, version_main=chrome_version)
 driver.set_page_load_timeout(60)
 
-#********You can add a chrome********# 
+#********add a chrome profile********# 
 # user_data_dir = os.path.join(os.getcwd(), "complaint_bot")
 # chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 
