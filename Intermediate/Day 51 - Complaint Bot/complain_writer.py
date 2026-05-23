@@ -14,7 +14,7 @@ def response(complains, reason):
         "overreacting"
     ]
     llm = Llama(
-            model_path="model/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf ",
+            model_path="model/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",
             n_ctx=2048,
             verbose=False)
 
