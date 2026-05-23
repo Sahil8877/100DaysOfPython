@@ -37,6 +37,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb google-chrome-stable
+          
+      - name: Configure shared memory
+        run: sudo mount -o remount,size=2G /dev/shm
 
       - name: Start Xvfb
         run: |
@@ -48,3 +51,7 @@ jobs:
 
       - name: Run bot
         run: python 'Intermediate/Day 51 - Complaint Bot/down_detector.py'
+        env:
+          DISPLAY: ":99"
+          # ✅ increase shared memory available to Chrome
+          DBUS_SESSION_BUS_ADDRESS: /dev/null  # prevents dbus-related crashes too

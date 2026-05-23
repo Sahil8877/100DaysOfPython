@@ -23,7 +23,8 @@ def get_chrome_major_version():
 
 options = uc.ChromeOptions()
 options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--disable-dev-shm-usage")  # ✅ tells Chrome to use /tmp instead
+options.add_argument("--shm-size=2gb")            # ✅ allocate enough shared memory
 options.add_argument("--window-size=1920,1080")
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_argument("--lang=en-GB")
