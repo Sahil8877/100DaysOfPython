@@ -1,5 +1,6 @@
 
-undetected_chromedriverquote
+undetected_chromedriver
+quote
 pytz
 requests
 dotenv
