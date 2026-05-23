@@ -13,14 +13,14 @@ def response(complains, reason):
         "chronically online",
         "overreacting"
     ]
-
-    for complaint in complains:
-        tone = random.choice(tones)
-        llm = Llama(
+    llm = Llama(
             model_path="model/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf ",
             n_ctx=2048,
             verbose=False)
 
+    for complaint in complains:
+        tone = random.choice(tones)
+        
         messages = [
             {
                 "role": "system",
@@ -42,11 +42,11 @@ def response(complains, reason):
 
         response = llm.create_chat_completion(
             messages=messages,
-            max_tokens=40,
+            max_tokens=60,
             temperature=1.1,
             top_p=0.9,
             repeat_penalty=1.25,
-            stop=["\n"]
+            stop=["\n", "<|eot_id|>"]
         )
 
         print(response['choices'][0]['message']['content'])
