@@ -28,12 +28,19 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Ensure model exists
+      # ✅ Download ONLY if model missing
+      - name: Download model if not exists
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python 'Intermediate/Day 51 - Complaint Bot/download_model.py'
+        run: |
+          python "Intermediate/Day 51 - Complaint Bot/download_model.py"
 
-      
+      # ✅ Save cache AFTER download
+      - name: Save model cache
+        uses: actions/cache/save@v4
+        with:
+          path: model/
+          key: gguf-model-v1
 
       - name: Install Xvfb
         run: sudo apt-get update && sudo apt-get install -y xvfb
@@ -42,4 +49,4 @@ jobs:
         run: |
           Xvfb :99 -screen 0 1920x1080x24 &
           export DISPLAY=:99
-          python 'Intermediate/Day 51 - Complaint Bot/down_detector.py'
+          python "Intermediate/Day 51 - Complaint Bot/down_detector.py"
