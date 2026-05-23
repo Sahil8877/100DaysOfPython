@@ -2,7 +2,7 @@ name: Complaint Bot Job
 
 on:
   schedule:
-    - cron: "0 */6 * * *"   # every 6 hours
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 jobs:
@@ -17,19 +17,20 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          
-      - name: Ensure model exists
-        run: python '/Intermediate/Day 51 - Complaint Bot/download_model.py'
 
+      # ✅ Restore cache FIRST
       - name: Cache model
         uses: actions/cache@v4
         with:
           path: model/
           key: gguf-model-v1
 
+      # ✅ Download model only if not cached
+      - name: Ensure model exists
+        run: python download_model.py
+
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Install Xvfb
         run: sudo apt-get update && sudo apt-get install -y xvfb
@@ -38,4 +39,4 @@ jobs:
         run: |
           Xvfb :99 -screen 0 1920x1080x24 &
           export DISPLAY=:99
-          python '/Intermediate/Day 51 - Complaint Bot/down_detector.py'
+          python down_detector.py
