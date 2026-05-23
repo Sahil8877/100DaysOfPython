@@ -5,7 +5,6 @@ from selenium.webdriver.chromium import options
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import undetected_chromedriver as uc
-
 import time
 import subprocess
 import re
@@ -50,9 +49,19 @@ driver.get(URL)
 uk_cities = ['London','Glasgow']
 
 def get_weather_data(list_of_cities):
-    weather_today = {}
-    time.sleep(2)
     
+    weather_today = {}
+    # time.sleep(2)
+    try:
+        iframe_cookie_banner = webdriver_wait.until(EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR,"iframe[title='SP Consent Message']")))
+        accept_cookie_btn = webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,"button[title='Accept all']")))
+        accept_cookie_btn.click()
+    except Exception as e:
+        print('Cookie banner not found or some error occured.\n',e)
+    finally:
+        driver.switch_to.default_content()
+        time.sleep(2)
+
     webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,"input")))
     try: 
         for cities in list_of_cities:
@@ -88,6 +97,3 @@ def weather_complainer(weather_data):
     print("hi",weather_complaints)
     return weather_complaints
 
-webdriver_wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR,"button[title='Accept all']")) )
-
-driver.quit()
