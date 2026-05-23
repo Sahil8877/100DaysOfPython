@@ -17,6 +17,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          
+      - name: Ensure model exists
+        run: python '/Intermediate/Day 51 - Complaint Bot/download_model.py'
 
       - name: Cache model
         uses: actions/cache@v4
