@@ -17,7 +17,7 @@ def response(complains, reason):
     for complaint in complains:
         tone = random.choice(tones)
         llm = Llama(
-            model_path=r"model/Meta-Llama-3-8B-Instruct.Q2_K.gguf",
+            model/Meta-Llama-3-8B-Instruct-Q2_K.gguf",
             n_ctx=2048,
             verbose=False)
 
