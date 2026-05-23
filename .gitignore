@@ -21,3 +21,4 @@ linkedin_bot.py
 *.pt
 *.pth
 *.ckpt*.gguf
+*.gguf
