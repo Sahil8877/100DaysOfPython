@@ -9,6 +9,9 @@ jobs:
   run-bot:
     runs-on: ubuntu-latest
 
+    env:
+      DISPLAY: ":99"  # ✅ Set at job level so ALL steps inherit it
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -18,7 +21,6 @@ jobs:
         with:
           python-version: "3.11"
 
-      # ✅ Restore cache FIRST
       - name: Cache model
         uses: actions/cache@v4
         with:
@@ -28,17 +30,21 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # ✅ Download model only if not cached
       - name: Ensure model exists
         run: python 'Intermediate/Day 51 - Complaint Bot/download_model.py'
 
-      
+      - name: Install Chrome + Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb google-chrome-stable
 
-      - name: Install Xvfb
-        run: sudo apt-get update && sudo apt-get install -y xvfb
-
-      - name: Run bot with display
+      - name: Start Xvfb
         run: |
           Xvfb :99 -screen 0 1920x1080x24 &
-          export DISPLAY=:99
-          python 'Intermediate/Day 51 - Complaint Bot/down_detector.py'
+          sleep 2  # Give it time to initialise
+
+      - name: Check Chrome version  # ✅ So you know what to set version_main to
+        run: google-chrome --version
+
+      - name: Run bot
+        run: python 'Intermediate/Day 51 - Complaint Bot/down_detector.py'
