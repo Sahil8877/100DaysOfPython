@@ -83,6 +83,7 @@ def get_downdetector_data(list_of_companies):
         driver.quit()
     except Exception as e:
         print('Error',e)
+    finally:
         driver.quit()
 
     return down_today

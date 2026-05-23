@@ -83,6 +83,8 @@ def get_weather_data(list_of_cities):
 
     except Exception as e:
         print('Error',e)
+        
+    finally:
         driver.quit()
       
     return weather_today
