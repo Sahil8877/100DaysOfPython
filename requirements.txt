@@ -1,3 +1,5 @@
+
+undetected_chromedriver
 quote
 pytz
 requests
@@ -7,3 +9,5 @@ serpapi
 google-search-results
 bs4
 llama-cpp-python
+huggingface_hub
+selenium
