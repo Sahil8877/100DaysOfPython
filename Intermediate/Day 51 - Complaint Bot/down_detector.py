@@ -27,11 +27,14 @@ options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--window-size=1920,1080")
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_argument("--lang=en-GB")
+options.add_argument(
+    "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+)
 
 chrome_version = get_chrome_major_version()
-print(f"Detected Chrome version: {chrome_version}")
-
 driver = uc.Chrome(options=options, version_main=chrome_version)
+driver.set_page_load_timeout(60)
 
 #********You can add a chrome********# 
 # user_data_dir = os.path.join(os.getcwd(), "complaint_bot")
