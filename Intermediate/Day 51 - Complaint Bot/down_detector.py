@@ -45,7 +45,7 @@ def get_downdetector_data(list_of_companies):
                 banner_element = driver.find_element(By.CSS_SELECTOR,"#company-status")
                 banner_element_attr_color = banner_element.get_attribute('class')
 
-                if 'border-[var(--color-dd-red)]' in banner_element_attr_color:
+                if 'border-[var(--color-dd-blue)]' in banner_element_attr_color:
                     data_card_element = driver.find_element(By.CSS_SELECTOR,"div[aria-label='Most reported problems breakdown']")
                     reported_problems = data_card_element.find_elements(By.CSS_SELECTOR,"div[role='listitem']")
                     reported_data_dict = {}

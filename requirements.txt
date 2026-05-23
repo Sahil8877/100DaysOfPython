@@ -6,3 +6,4 @@ pyshorteners
 serpapi
 google-search-results
 bs4
+llama-cpp-python
