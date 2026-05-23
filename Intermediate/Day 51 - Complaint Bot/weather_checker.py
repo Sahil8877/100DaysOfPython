@@ -4,22 +4,47 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chromium import options
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import complain_writer
-import os,time
+import undetected_chromedriver as uc
 
-chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument("--headless=new")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--window-size=1920,1080")
+import time
+import subprocess
+import re
 
+def get_chrome_major_version():
+    try:
+        result = subprocess.run(
+            ["google-chrome", "--version"],
+            capture_output=True, text=True
+        )
+        match = re.search(r'(\d+)\.', result.stdout)
+        return int(match.group(1)) if match else None
+    except Exception:
+        return None
+
+options = uc.ChromeOptions()
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")  # ✅ tells Chrome to use /tmp instead
+options.add_argument("--shm-size=2gb")            # ✅ allocate enough shared memory
+options.add_argument("--window-size=1920,1080")
+options.add_argument("--disable-blink-features=AutomationControlled")
+options.add_argument("--lang=en-GB")
+options.add_argument(
+    "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+)
+
+chrome_version = get_chrome_major_version()
+
+#********add a chrome profile********# 
 # user_data_dir = os.path.join(os.getcwd(), "complaint_bot")
 # chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 
+
 URL = "https://weather.com/en-GB/weather/today"
 
-driver = webdriver.Chrome(options=chrome_options)
+driver = uc.Chrome(options=options, version_main=chrome_version)
 webdriver_wait = WebDriverWait(driver,10)
+driver.set_page_load_timeout(60)
 driver.get(URL)
 
 uk_cities = ['London','Glasgow']
@@ -64,7 +89,5 @@ def weather_complainer(weather_data):
     return weather_complaints
 
 webdriver_wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR,"button[title='Accept all']")) )
-
-complain_writer.response(weather_complainer(get_weather_data(uk_cities)),"weather")
 
 driver.quit()

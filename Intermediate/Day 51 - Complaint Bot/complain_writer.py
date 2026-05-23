@@ -3,6 +3,7 @@ import random
 
 
 def response(complains, reason):
+    response_list = []
     tones = [
         "angry",
         "sarcastic",
@@ -17,7 +18,7 @@ def response(complains, reason):
             model_path="model/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",
             n_ctx=2048,
             verbose=False)
-
+    
     for complaint in complains:
         tone = random.choice(tones)
         
@@ -49,5 +50,7 @@ def response(complains, reason):
             stop=["\n", "<|eot_id|>"]
         )
 
-        print(response['choices'][0]['message']['content'])
-        print("\n\n")
+        response_list.append(response['choices'][0]['message']['content'])
+        
+    return response_list
+        

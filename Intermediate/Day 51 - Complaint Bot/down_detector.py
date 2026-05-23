@@ -5,7 +5,7 @@ from selenium.webdriver.chromium import options
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import undetected_chromedriver as uc
-import complain_writer
+
 import time
 import subprocess
 import re
@@ -95,4 +95,3 @@ def downdetector_complainer(downdetector_data):
     print(downdetector_complaints)
     return downdetector_complaints
 
-complain_writer.response(downdetector_complainer(get_downdetector_data(companies_to_check)),"website down")

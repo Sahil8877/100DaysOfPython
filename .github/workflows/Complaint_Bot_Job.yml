@@ -50,7 +50,7 @@ jobs:
         run: google-chrome --version
 
       - name: Run bot
-        run: python 'Intermediate/Day 51 - Complaint Bot/down_detector.py'
+        run: python 'Intermediate/Day 51 - Complaint Bot/main.py'
         env:
           DISPLAY: ":99"
           # ✅ increase shared memory available to Chrome
