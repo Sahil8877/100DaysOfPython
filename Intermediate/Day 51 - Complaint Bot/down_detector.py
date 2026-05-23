@@ -5,7 +5,6 @@ from selenium.webdriver.chromium import options
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import undetected_chromedriver as uc
-
 import time
 import subprocess
 import re
@@ -21,33 +20,35 @@ def get_chrome_major_version():
     except Exception:
         return None
 
-options = uc.ChromeOptions()
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")  # ✅ tells Chrome to use /tmp instead
-options.add_argument("--shm-size=2gb")            # ✅ allocate enough shared memory
-options.add_argument("--window-size=1920,1080")
-options.add_argument("--disable-blink-features=AutomationControlled")
-options.add_argument("--lang=en-GB")
-options.add_argument(
-    "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
-)
 
-chrome_version = get_chrome_major_version()
-driver = uc.Chrome(options=options, version_main=chrome_version)
-driver.set_page_load_timeout(60)
 
 #********add a chrome profile********# 
 # user_data_dir = os.path.join(os.getcwd(), "complaint_bot")
 # chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 
-webdriver_wait = WebDriverWait(driver,10)
 
 companies_to_check = [{'Apex Legends' : 'https://downdetector.co.uk/status/apex-legends/'},
                       {'Virgin Media' : 'https://downdetector.co.uk/status/virgin-media/'}]
 
 def get_downdetector_data(list_of_companies):
     down_today = {}
+
+    options = uc.ChromeOptions()
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")  # ✅ tells Chrome to use /tmp instead
+    options.add_argument("--shm-size=2gb")            # ✅ allocate enough shared memory
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--lang=en-GB")
+    options.add_argument(
+        "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+    )
+
+    driver = uc.Chrome(options=options, version_main=get_chrome_major_version())
+    driver.set_page_load_timeout(60)
+    webdriver_wait = WebDriverWait(driver,10)
+
     try:
         for org_data in list_of_companies:
             
