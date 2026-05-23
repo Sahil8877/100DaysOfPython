@@ -1,4 +1,7 @@
 name: Complaint Bot Job
+env:
+    X_PASS_EMAIL: ${{secrets.X_PASS_EMAIL}}
+    X_PASS: ${{secrets.X_PASS}}
 
 on:
   schedule:

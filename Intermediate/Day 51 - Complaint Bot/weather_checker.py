@@ -93,6 +93,5 @@ def weather_complainer(weather_data):
             weather_complaints.append(f"{city}'s {data['temp']} degree temperature")
         elif data['humi'] > 7:
             weather_complaints.append(f"{city}'s {data['humi']}% humidity")
-    print("hi",weather_complaints)
     return weather_complaints
 
