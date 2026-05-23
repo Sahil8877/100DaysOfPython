@@ -3,7 +3,7 @@ import os
 import shutil
 
 repo_id = "bartowski/Meta-Llama-3-8B-Instruct-GGUF"
-filename = "Meta-Llama-3-8B-Instruct-Q2_K.gguf"
+filename = "Meta-Llama-3-8B-Instruct-Q4_K_M.gguf "
 
 os.makedirs("model", exist_ok=True)
 
