@@ -7,14 +7,31 @@ from selenium.webdriver.support import expected_conditions as EC
 import undetected_chromedriver as uc
 import complain_writer
 import time
+import subprocess
+import re
+
+def get_chrome_major_version():
+    try:
+        result = subprocess.run(
+            ["google-chrome", "--version"],
+            capture_output=True, text=True
+        )
+        match = re.search(r'(\d+)\.', result.stdout)
+        return int(match.group(1)) if match else None
+    except Exception:
+        return None
 
 options = uc.ChromeOptions()
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--window-size=1920,1080")
 options.add_argument("--disable-blink-features=AutomationControlled")
+options.add_argument("--lang=en-GB")
 
-driver = uc.Chrome(options=options, version_main=148)
+chrome_version = get_chrome_major_version()
+print(f"Detected Chrome version: {chrome_version}")
+
+driver = uc.Chrome(options=options, version_main=chrome_version)
 
 #********You can add a chrome********# 
 # user_data_dir = os.path.join(os.getcwd(), "complaint_bot")
