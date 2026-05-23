@@ -25,12 +25,14 @@ jobs:
           path: model/
           key: gguf-model-v1
 
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
       # ✅ Download model only if not cached
       - name: Ensure model exists
         run: python 'Intermediate/Day 51 - Complaint Bot/download_model.py'
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      
 
       - name: Install Xvfb
         run: sudo apt-get update && sudo apt-get install -y xvfb
