@@ -61,7 +61,7 @@ def post_tweets(complaints):
             (By.CSS_SELECTOR, "button[type='submit']")
         ))
         continue_button.click()
-
+        time.sleep(5)
         password_input_element = webdriver_wait.until(EC.visibility_of_element_located(
             (By.CSS_SELECTOR, "input[type='password']")
         ))
