@@ -1,3 +1,33 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chromium import options
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import undetected_chromedriver as uc
+import time
+import subprocess
+import re
+import os
+
+def get_chrome_major_version():
+    commands = [
+        ["google-chrome", "--version"],
+        ["google-chrome-stable", "--version"],
+        ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "--version"],
+    ]
+    for cmd in commands:
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            match = re.search(r'(\d+)\.', result.stdout)
+            if match:
+                return int(match.group(1))
+        except Exception:
+            continue
+    return None
+
+URL = 'https://x.com/'
+
 def post_tweets(complaints):
     driver = None
     try:
@@ -32,7 +62,7 @@ def post_tweets(complaints):
         username_input = webdriver_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[autocomplete='username']")))
         username_input.send_keys(os.getenv('X_PASS_EMAIL'))
 
-        # ---- Click the "Continue" button (the one with class 'j-pmlt8x0' and text 'Continue') ----
+        # ---- Click the "Continue" button (using the class 'j-pmlt8x0' from the current X login page) ----
         continue_btn = webdriver_wait.until(EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, 'j-pmlt8x0') and .//div[text()='Continue']]")))
         continue_btn.click()
 
@@ -40,11 +70,11 @@ def post_tweets(complaints):
         password_input = webdriver_wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input[type='password']")))
         password_input.send_keys(os.getenv("X_PASS"))
 
-        # ---- Click the "Log in" button (same class, text 'Log in') ----
+        # ---- Click the "Log in" button ----
         login_btn = webdriver_wait.until(EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, 'j-pmlt8x0') and .//div[text()='Log in']]")))
         login_btn.click()
 
-        # ---- Wait a moment for the home page to load ----
+        # ---- Wait for home page to load ----
         time.sleep(5)
 
         # ---- Check for verification ----
@@ -64,7 +94,7 @@ def post_tweets(complaints):
         # ---- Post complaints ----
         for idx, complaint in enumerate(complaints):
             try:
-                # Wait for tweet compose box (the classic selector – may need update in future)
+                # Wait for tweet compose box (the classic selector – may need update)
                 textbox = webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".public-DraftStyleDefault-block")))
                 textbox.click()
                 textbox.send_keys(complaint.strip('"'))
