@@ -25,7 +25,7 @@ def get_chrome_major_version():
 # chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 
 URL = "https://weather.com/en-GB/weather/today"
-uk_cities = ['London', 'Glasgow']
+cities = ['London', 'Glasgow']
 
 def get_weather_data(list_of_cities):
 
