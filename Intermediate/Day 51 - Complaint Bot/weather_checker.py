@@ -44,7 +44,7 @@ cities = [
     # 'London', 'Manchester',       
     # 'New York', 'Bengaluru',    
     # 'Paris', 'Berlin',           
-    'Mumbai', 'Tokyo',            
+    'Mumbai', #'Tokyo',            
     # 'Sydney', 'Dubai',          
 ]
 

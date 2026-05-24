@@ -34,7 +34,7 @@ def get_chrome_major_version():
 # Kept at 20 intentionally - GitHub Actions free runners crash Chrome beyond this
 companies_to_check = [
     # Global
-    {'Google'        : 'https://downdetector.com/status/google/'},
+    # {'Google'        : 'https://downdetector.com/status/google/'},
     # {'YouTube'       : 'https://downdetector.com/status/youtube/'},
     # {'Facebook'      : 'https://downdetector.com/status/facebook/'},
     # {'Instagram'     : 'https://downdetector.com/status/instagram/'},
