@@ -35,8 +35,8 @@ def get_downdetector_data(list_of_companies):
 
     options = uc.ChromeOptions()
     options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")  # ✅ tells Chrome to use /tmp instead
-    options.add_argument("--shm-size=2gb")            # ✅ allocate enough shared memory
+    options.add_argument("--disable-dev-shm-usage") 
+    options.add_argument("--shm-size=2gb")           
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--lang=en-GB")
@@ -67,7 +67,7 @@ def get_downdetector_data(list_of_companies):
                 banner_element = driver.find_element(By.CSS_SELECTOR,"#company-status")
                 banner_element_attr_color = banner_element.get_attribute('class')
 
-                if 'border-[var(--color-dd-blue)]' in banner_element_attr_color:
+                if 'border-[var(--color-dd-red)]' in banner_element_attr_color:
                     data_card_element = driver.find_element(By.CSS_SELECTOR,"div[aria-label='Most reported problems breakdown']")
                     reported_problems = data_card_element.find_elements(By.CSS_SELECTOR,"div[role='listitem']")
                     reported_data_dict = {}

@@ -33,8 +33,8 @@ def post_tweets(complaints):
         options = uc.ChromeOptions()
 
         options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")  # ✅ tells Chrome to use /tmp instead
-        options.add_argument("--shm-size=2gb")            # ✅ allocate enough shared memory
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--shm-size=2gb")            
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--disable-blink-features=AutomationControlled")
         options.add_argument("--lang=en-GB")
@@ -50,13 +50,13 @@ def post_tweets(complaints):
         driver.get(URL)
 
         username_input_element = webdriver_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"input[name='username_or_email']")))
-        username_input_element.send_keys(os.getenv('X_PASS_EMAIL')) #This will depend on your .env variable
+        username_input_element.send_keys(os.getenv('X_PASS_EMAIL')) # .env variable
 
         continue_button = driver.find_element(By.CSS_SELECTOR,"button[type='submit']")
         continue_button.click()
 
         password_input_element = webdriver_wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR,"input[type='password']")))
-        password_input_element.send_keys(os.getenv("X_PASS"))
+        password_input_element.send_keys(os.getenv("X_PASS")) # .env variable
 
         continue_button = webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,"button[type='submit']")))
         continue_button.click()

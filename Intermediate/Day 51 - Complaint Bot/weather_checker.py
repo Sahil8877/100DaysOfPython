@@ -33,8 +33,8 @@ def get_weather_data(list_of_cities):
 
     options = uc.ChromeOptions()
     options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")  # ✅ tells Chrome to use /tmp instead
-    options.add_argument("--shm-size=2gb")            # ✅ allocate enough shared memory
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--shm-size=2gb")            
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--lang=en-GB")
@@ -89,9 +89,9 @@ def get_weather_data(list_of_cities):
 def weather_complainer(weather_data):
     weather_complaints = []
     for city,data in weather_data.items():
-        if data['temp'] > 3:
+        if data['temp'] > 30:
             weather_complaints.append(f"{city}'s {data['temp']} degree temperature")
-        elif data['humi'] > 7:
+        elif data['humi'] > 70:
             weather_complaints.append(f"{city}'s {data['humi']}% humidity")
     return weather_complaints
 

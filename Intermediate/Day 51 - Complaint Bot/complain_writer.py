@@ -1,7 +1,6 @@
 from llama_cpp import Llama
 import random
 
-
 def response(complains, reason):
     response_list = []
     tones = [
