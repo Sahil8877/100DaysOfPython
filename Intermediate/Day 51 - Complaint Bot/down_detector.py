@@ -210,7 +210,8 @@ def get_downdetector_data(list_of_companies):
 
                     except Exception as e:
                         print(f"Error on {org_name}: {e}")
-                        continue  
+                        continue
+                    time.sleep(2)  
 
         except Exception as e:
             print(f"Batch {i // batch_size + 1} error: {e}")
