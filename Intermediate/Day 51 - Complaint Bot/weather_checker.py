@@ -28,11 +28,11 @@ def get_chrome_major_version():
 URL = "https://weather.com/en-GB/weather/today"
 
 cities = [
-    'London', 'Manchester',       # 🇬🇧 UK
-    'New York', 'Bengaluru',    # 🇺🇸 USA
-    'Paris', 'Berlin',            # 🇪🇺 Europe
-    'Mumbai', 'Tokyo',            # 🌏 Asia
-    'Sydney', 'Dubai',            # 🌏 Oceania / Middle East
+    'London', 'Manchester',       
+    'New York', 'Bengaluru',    
+    'Paris', 'Berlin',           
+    'Mumbai', 'Tokyo',            
+    'Sydney', 'Dubai',          
 ]
 
 def create_driver():
