@@ -10,6 +10,9 @@ import subprocess
 import re
 
 def get_chrome_major_version():
+    # Detects the installed Chrome version on the machine
+    # undetected_chromedriver needs this to match the chromedriver binary it downloads
+    # Mismatch between Chrome and chromedriver causes silent failures or bot detection
     try:
         result = subprocess.run(
             ["google-chrome", "--version"],
@@ -21,12 +24,16 @@ def get_chrome_major_version():
         return None
 
 #********add a chrome profile********#
-
+# Uncommenting this would persist cookies and login sessions across runs
+# Useful for avoiding repeated cookie banners but risks stale sessions
 # user_data_dir = os.path.join(os.getcwd(), "complaint_bot")
 # chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 
+# Services to monitor for outages
+# Mixed between downdetector.com (global) and downdetector.co.uk (UK specific)
+# Kept at 20 intentionally - GitHub Actions free runners crash Chrome beyond this
 companies_to_check = [
-    # 🌍 Global
+    # Global
     {'Google'        : 'https://downdetector.com/status/google/'},
     {'YouTube'       : 'https://downdetector.com/status/youtube/'},
     {'Facebook'      : 'https://downdetector.com/status/facebook/'},
@@ -35,10 +42,10 @@ companies_to_check = [
     {'Amazon'        : 'https://downdetector.com/status/amazon/'},
     {'Netflix'       : 'https://downdetector.com/status/netflix/'},
     {'Spotify'       : 'https://downdetector.com/status/spotify/'},
-    # 🎮 Gaming
+    # Gaming
     {'Steam'         : 'https://downdetector.com/status/steam/'},
     {'Apex Legends'  : 'https://downdetector.com/status/apex-legends/'},
-    # 🇬🇧 UK
+    # UK
     {'Virgin Media'  : 'https://downdetector.co.uk/status/virgin-media/'},
     {'BT'            : 'https://downdetector.co.uk/status/bt-british-telecom/'},
     {'Sky'           : 'https://downdetector.co.uk/status/sky/'},
@@ -47,31 +54,38 @@ companies_to_check = [
     {'Monzo'         : 'https://downdetector.co.uk/status/monzo/'},
     {'BBC iPlayer'   : 'https://downdetector.co.uk/status/iplayer/'},
     {'Deliveroo'     : 'https://downdetector.co.uk/status/deliveroo/'},
-    # 🇺🇸 US
+    # US
     {'AT&T'          : 'https://downdetector.com/status/att/'},
     {'Verizon'       : 'https://downdetector.com/status/verizon/'},
 ]
 
 def create_driver():
+    # Creates a new Chrome instance with settings tuned for GitHub Actions
+    # Called per batch so each batch starts with a clean browser state
+    # A single long-running driver crashes due to memory exhaustion in CI
     options = uc.ChromeOptions()
-    options.page_load_strategy = 'eager'
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--shm-size=2gb")
+    options.page_load_strategy = 'eager'       # Stop waiting once DOM is ready, skip ads/analytics loading
+    options.add_argument("--no-sandbox")        # Required in containerised CI environments
+    options.add_argument("--disable-dev-shm-usage")  # Avoids shared memory crashes in Docker/CI
+    options.add_argument("--shm-size=2gb")      # Allocates enough memory to prevent renderer crashes
     options.add_argument("--window-size=1920,1080")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--lang=en-GB")
+    options.add_argument("--disable-gpu")       # Prevents graphical crashes in headless environments
+    options.add_argument("--lang=en-GB")        # Ensures consistent language on downdetector pages
     options.add_argument(
         "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
     )
     driver = uc.Chrome(options=options, version_main=get_chrome_major_version())
-    driver.set_page_load_timeout(90)                           
+    driver.set_page_load_timeout(90)  # Generous timeout for slow CI network conditions
     return driver
 
 def get_downdetector_data(list_of_companies):
     down_today = {}
-    batch_size = 10  # 10 companies at a time
+
+    # Process companies in batches with a fresh driver per batch
+    # Without batching, Chrome accumulates memory and crashes mid-run in GitHub Actions
+    # batch_size of 10 is the safe ceiling for free runners (2 CPU, 7GB RAM)
+    batch_size = 10
 
     for i in range(0, len(list_of_companies), batch_size):
         batch = list_of_companies[i:i + batch_size]
@@ -84,11 +98,16 @@ def get_downdetector_data(list_of_companies):
                 for org_name in org_data:
                     try:
                         driver.get(org_data.get(org_name))
+
+                        # Wait for the status banner to appear before reading it
+                        # This is the main element that tells us if a service is down
                         webdriver_wait.until(EC.visibility_of_element_located(
                             (By.CSS_SELECTOR, "#company-status")
                         ))
                         time.sleep(2)
 
+                        # Dismiss cookie banner if present
+                        # Wrapped in try/except as it only appears on first visit per domain
                         try:
                             cookie_button = driver.find_element(By.CSS_SELECTOR, "button[id^='onetrust-accept-btn-handler']")
                             cookie_button.click()
@@ -96,17 +115,20 @@ def get_downdetector_data(list_of_companies):
                             pass
 
                         time.sleep(2)
+
                         banner_element = driver.find_element(By.CSS_SELECTOR, "#company-status")
                         banner_element_attr_color = banner_element.get_attribute('class')
 
+                        # Downdetector uses CSS border colour to indicate outage severity
+                        # dd-red = active outage, dd-blue = normal, dd-yellow = warning
                         if 'border-[var(--color-dd-red)]' in banner_element_attr_color:
                             data_card_element = driver.find_element(By.CSS_SELECTOR, "div[aria-label='Most reported problems breakdown']")
                             reported_problems = data_card_element.find_elements(By.CSS_SELECTOR, "div[role='listitem']")
                             reported_data_dict = {}
 
                             for reports in reported_problems:
-                                reported_data = reports.find_element(By.CSS_SELECTOR, ".relative").text
-                                reported_text = reports.find_element(By.CSS_SELECTOR, "div.text-center").text
+                                reported_data = reports.find_element(By.CSS_SELECTOR, ".relative").text   # percentage
+                                reported_text = reports.find_element(By.CSS_SELECTOR, "div.text-center").text  # label
                                 reported_data_dict[reported_text] = reported_data
 
                             down_today[org_name] = {'report': reported_data_dict, 'desc': banner_element.text}
@@ -114,13 +136,16 @@ def get_downdetector_data(list_of_companies):
                             print(org_name, "has no major outage reported.")
 
                     except Exception as e:
+                        # Log and skip - one bad URL or crash should not stop the rest of the batch
                         print(f"Error on {org_name}: {e}")
                         continue
-                    time.sleep(2)  
+
+                    time.sleep(2)  # Brief pause between pages to reduce memory pressure
 
         except Exception as e:
             print(f"Batch {i // batch_size + 1} error: {e}")
         finally:
+            # Always quit the driver to free memory before next batch starts
             if driver:
                 try:
                     driver.quit()
@@ -130,6 +155,7 @@ def get_downdetector_data(list_of_companies):
     return down_today
 
 def downdetector_complainer(downdetector_data):
+    # Converts raw outage data into readable complaint strings for the LLM
     downdetector_complaints = []
     for org, data in downdetector_data.items():
         reports = ",".join([" " + report + " " + data['report'].get(report) for report in data['report']])
