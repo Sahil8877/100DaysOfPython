@@ -35,28 +35,28 @@ def get_chrome_major_version():
 companies_to_check = [
     # Global
     {'Google'        : 'https://downdetector.com/status/google/'},
-    {'YouTube'       : 'https://downdetector.com/status/youtube/'},
-    {'Facebook'      : 'https://downdetector.com/status/facebook/'},
-    {'Instagram'     : 'https://downdetector.com/status/instagram/'},
-    {'WhatsApp'      : 'https://downdetector.com/status/whatsapp/'},
-    {'Amazon'        : 'https://downdetector.com/status/amazon/'},
-    {'Netflix'       : 'https://downdetector.com/status/netflix/'},
-    {'Spotify'       : 'https://downdetector.com/status/spotify/'},
-    # Gaming
-    {'Steam'         : 'https://downdetector.com/status/steam/'},
-    {'Apex Legends'  : 'https://downdetector.com/status/apex-legends/'},
-    # UK
-    {'Virgin Media'  : 'https://downdetector.co.uk/status/virgin-media/'},
-    {'BT'            : 'https://downdetector.co.uk/status/bt-british-telecom/'},
-    {'Sky'           : 'https://downdetector.co.uk/status/sky/'},
-    {'Vodafone UK'   : 'https://downdetector.co.uk/status/vodafone/'},
-    {'Barclays'      : 'https://downdetector.co.uk/status/barclays/'},
-    {'Monzo'         : 'https://downdetector.co.uk/status/monzo/'},
-    {'BBC iPlayer'   : 'https://downdetector.co.uk/status/iplayer/'},
-    {'Deliveroo'     : 'https://downdetector.co.uk/status/deliveroo/'},
-    # US
-    {'AT&T'          : 'https://downdetector.com/status/att/'},
-    {'Verizon'       : 'https://downdetector.com/status/verizon/'},
+    # {'YouTube'       : 'https://downdetector.com/status/youtube/'},
+    # {'Facebook'      : 'https://downdetector.com/status/facebook/'},
+    # {'Instagram'     : 'https://downdetector.com/status/instagram/'},
+    # {'WhatsApp'      : 'https://downdetector.com/status/whatsapp/'},
+    # {'Amazon'        : 'https://downdetector.com/status/amazon/'},
+    # {'Netflix'       : 'https://downdetector.com/status/netflix/'},
+    # {'Spotify'       : 'https://downdetector.com/status/spotify/'},
+    # # Gaming
+    # {'Steam'         : 'https://downdetector.com/status/steam/'},
+    # {'Apex Legends'  : 'https://downdetector.com/status/apex-legends/'},
+    # # UK
+    # {'Virgin Media'  : 'https://downdetector.co.uk/status/virgin-media/'},
+    # {'BT'            : 'https://downdetector.co.uk/status/bt-british-telecom/'},
+    # {'Sky'           : 'https://downdetector.co.uk/status/sky/'},
+    # {'Vodafone UK'   : 'https://downdetector.co.uk/status/vodafone/'},
+    # {'Barclays'      : 'https://downdetector.co.uk/status/barclays/'},
+    # {'Monzo'         : 'https://downdetector.co.uk/status/monzo/'},
+    # {'BBC iPlayer'   : 'https://downdetector.co.uk/status/iplayer/'},
+    # {'Deliveroo'     : 'https://downdetector.co.uk/status/deliveroo/'},
+    # # US
+    # {'AT&T'          : 'https://downdetector.com/status/att/'},
+    # {'Verizon'       : 'https://downdetector.com/status/verizon/'},
 ]
 
 def create_driver():

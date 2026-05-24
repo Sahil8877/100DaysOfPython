@@ -49,26 +49,26 @@ def post_tweets(complaints):
         webdriver_wait = WebDriverWait(driver, 10)
         driver.get(URL)
 
-        username_input_element = webdriver_wait.until(EC.presence_of_element_located(
-            (By.CSS_SELECTOR, "input[autocomplete='username']")  
-        ))
+        username_input_element = webdriver_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[autocomplete='username']")))
         username_input_element.send_keys(os.getenv('X_PASS_EMAIL'))
 
-        continue_button = webdriver_wait.until(EC.element_to_be_clickable(
-            (By.CSS_SELECTOR, "button[type='submit']")
-        ))
+        continue_button = webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']") ))
         continue_button.click()
         time.sleep(5)
-        password_input_element = webdriver_wait.until(EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, "input[type='password']")
-        ))
+        password_input_element = webdriver_wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input[type='password']")))
         password_input_element.send_keys(os.getenv("X_PASS"))
 
-        continue_button = webdriver_wait.until(EC.element_to_be_clickable(
-            (By.CSS_SELECTOR, "button[type='submit']")
-        ))
+        continue_button = webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']")))
         continue_button.click()
         time.sleep(3)  # wait after login
+        
+        try:
+            # Save page source and screenshot for inspection
+            with open("after_login.html", "w", encoding="utf-8") as f:
+                f.write(driver.page_source)
+            driver.save_screenshot("after_login.png")
+        except:
+            pass
 
         for complaint in complaints:
             time.sleep(2)
@@ -77,9 +77,7 @@ def post_tweets(complaints):
             ))
             textbox_element.send_keys(complaint.strip('"'))
             time.sleep(2)
-            tweet_button = webdriver_wait.until(EC.presence_of_element_located(
-                (By.CSS_SELECTOR, "button[data-testid='tweetButtonInline']")
-            ))
+            tweet_button = webdriver_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-testid='tweetButtonInline']")))
             driver.execute_script("arguments[0].click();", tweet_button)
             time.sleep(2)  # wait between tweets
 

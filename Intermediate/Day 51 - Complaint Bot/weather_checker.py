@@ -41,11 +41,11 @@ URL = "https://weather.com/en-GB/weather/today"
 # List of cities to scrape – mixed global and regional to test cross-locale behaviour
 # Order is preserved in output; duplicates would cause overwrites (not prevented)
 cities = [
-    'London', 'Manchester',       
-    'New York', 'Bengaluru',    
-    'Paris', 'Berlin',           
+    # 'London', 'Manchester',       
+    # 'New York', 'Bengaluru',    
+    # 'Paris', 'Berlin',           
     'Mumbai', 'Tokyo',            
-    'Sydney', 'Dubai',          
+    # 'Sydney', 'Dubai',          
 ]
 
 def create_driver():
