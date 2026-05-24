@@ -27,7 +27,39 @@ def get_chrome_major_version():
 
 
 URL = "https://weather.com/en-GB/weather/today"
-uk_cities = ['London','Glasgow']
+
+cities = [
+    # 🇬🇧 UK
+    'London', 'Glasgow', 'Manchester', 'Birmingham', 'Edinburgh',
+    'Liverpool', 'Leeds', 'Bristol', 'Sheffield', 'Newcastle',
+
+    # 🇺🇸 USA
+    'New York', 'Los Angeles', 'Chicago', 'Houston', 'Miami',
+    'San Francisco', 'Seattle', 'Boston', 'Dallas', 'Atlanta',
+
+    # 🇪🇺 Europe
+    'Paris', 'Berlin', 'Madrid', 'Rome', 'Amsterdam',
+    'Barcelona', 'Vienna', 'Stockholm', 'Oslo', 'Zurich',
+
+    # 🇮🇳 India
+    'Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata',
+
+    # 🇦🇺 Australia
+    'Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide',
+
+    # 🇨🇦 Canada
+    'Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa',
+
+    # 🌏 Asia
+    'Tokyo', 'Seoul', 'Shanghai', 'Singapore', 'Hong Kong',
+    'Bangkok', 'Kuala Lumpur', 'Jakarta', 'Dubai', 'Riyadh',
+
+    # 🌍 Africa & Middle East
+    'Cairo', 'Lagos', 'Nairobi', 'Johannesburg', 'Casablanca',
+
+    # 🌎 Latin America
+    'Sao Paulo', 'Buenos Aires', 'Mexico City', 'Bogota', 'Lima',
+]
 
 def get_weather_data(list_of_cities):
 
