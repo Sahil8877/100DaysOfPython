@@ -12,9 +12,9 @@ import os
 
 def get_chrome_major_version():
     commands = [
-        ["google-chrome", "--version"],                          # Linux
-        ["google-chrome-stable", "--version"],                   # Linux alt
-        ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "--version"],  # Mac
+        ["google-chrome", "--version"],
+        ["google-chrome-stable", "--version"],
+        ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "--version"],
     ]
     for cmd in commands:
         try:
@@ -29,47 +29,68 @@ def get_chrome_major_version():
 URL = 'https://x.com/'
 
 def post_tweets(complaints):
+    driver = None  # initialise
     try:
         options = uc.ChromeOptions()
-
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--shm-size=2gb")            
+        options.add_argument("--shm-size=2gb")
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--disable-blink-features=AutomationControlled")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-software-rasterizer")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--disable-background-networking")
         options.add_argument("--lang=en-GB")
         options.add_argument(
-            "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+            "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "  # ✅ space added
             "(KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
         )
 
-        driver = uc.Chrome(options=options,version_main=get_chrome_major_version())
+        driver = uc.Chrome(options=options, version_main=get_chrome_major_version())
         driver.set_page_load_timeout(60)
-
-        webdriver_wait = WebDriverWait(driver,10)
+        webdriver_wait = WebDriverWait(driver, 10)
         driver.get(URL)
 
-        username_input_element = webdriver_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"input[name='username_or_email']")))
-        username_input_element.send_keys(os.getenv('X_PASS_EMAIL')) # .env variable
+        username_input_element = webdriver_wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, "input[autocomplete='username']")  
+        ))
+        username_input_element.send_keys(os.getenv('X_PASS_EMAIL'))
 
-        continue_button = driver.find_element(By.CSS_SELECTOR,"button[type='submit']")
+        continue_button = webdriver_wait.until(EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, "button[type='submit']")
+        ))
         continue_button.click()
 
-        password_input_element = webdriver_wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR,"input[type='password']")))
-        password_input_element.send_keys(os.getenv("X_PASS")) # .env variable
+        password_input_element = webdriver_wait.until(EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, "input[type='password']")
+        ))
+        password_input_element.send_keys(os.getenv("X_PASS"))
 
-        continue_button = webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,"button[type='submit']")))
+        continue_button = webdriver_wait.until(EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, "button[type='submit']")
+        ))
         continue_button.click()
+        time.sleep(3)  # wait after login
 
         for complaint in complaints:
             time.sleep(2)
-            textbox_element = webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,".public-DraftStyleDefault-block")))
+            textbox_element = webdriver_wait.until(EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, ".public-DraftStyleDefault-block")
+            ))
             textbox_element.send_keys(complaint.strip('"'))
             time.sleep(2)
-            tweet_button = webdriver_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-testid='tweetButtonInline']")))
+            tweet_button = webdriver_wait.until(EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "button[data-testid='tweetButtonInline']")
+            ))
             driver.execute_script("arguments[0].click();", tweet_button)
-    except Exception as e:
-        print("Error occured\n",e)
-    finally:
-        driver.quit()
+            time.sleep(2)  # wait between tweets
 
+    except Exception as e:
+        print("Error occured\n", e)
+    finally:
+        if driver:  
+            try:
+                driver.quit()
+            except:
+                pass
