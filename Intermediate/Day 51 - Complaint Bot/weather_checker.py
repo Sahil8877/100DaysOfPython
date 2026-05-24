@@ -20,43 +20,19 @@ def get_chrome_major_version():
     except Exception:
         return None
 
-#********add a chrome profile********# 
+#********add a chrome profile********#
+
 # user_data_dir = os.path.join(os.getcwd(), "complaint_bot")
 # chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 
 URL = "https://weather.com/en-GB/weather/today"
 
 cities = [
-    # 🇬🇧 UK
-    'London', 'Glasgow', 'Manchester', 'Birmingham', 'Edinburgh',
-    'Liverpool', 'Leeds', 'Bristol', 'Sheffield', 'Newcastle',
-
-    # 🇺🇸 USA
-    'New York', 'Los Angeles', 'Chicago', 'Houston', 'Miami',
-    'San Francisco', 'Seattle', 'Boston', 'Dallas', 'Atlanta',
-
-    # 🇪🇺 Europe
-    'Paris', 'Berlin', 'Madrid', 'Rome', 'Amsterdam',
-    'Barcelona', 'Vienna', 'Stockholm', 'Oslo', 'Zurich',
-
-    # 🇮🇳 India
-    'Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata',
-
-    # 🇦🇺 Australia
-    'Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide',
-
-    # 🇨🇦 Canada
-    'Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa',
-
-    # 🌏 Asia
-    'Tokyo', 'Seoul', 'Shanghai', 'Singapore', 'Hong Kong',
-    'Bangkok', 'Kuala Lumpur', 'Jakarta', 'Dubai', 'Riyadh',
-
-    # 🌍 Africa & Middle East
-    'Cairo', 'Lagos', 'Nairobi', 'Johannesburg', 'Casablanca',
-
-    # 🌎 Latin America
-    'Sao Paulo', 'Buenos Aires', 'Mexico City', 'Bogota', 'Lima',
+    'London', 'Manchester',       # 🇬🇧 UK
+    'New York', 'Bengaluru',    # 🇺🇸 USA
+    'Paris', 'Berlin',            # 🇪🇺 Europe
+    'Mumbai', 'Tokyo',            # 🌏 Asia
+    'Sydney', 'Dubai',            # 🌏 Oceania / Middle East
 ]
 
 def create_driver():
@@ -65,14 +41,8 @@ def create_driver():
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--shm-size=2gb")
-    options.add_argument("--single-process")
-    options.add_argument("--no-zygote")
     options.add_argument("--window-size=1920,1080")
-    options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--disable-gpu")
-    options.add_argument("--disable-software-rasterizer")
-    options.add_argument("--disable-extensions")
-    options.add_argument("--disable-background-networking")
     options.add_argument("--lang=en-GB")
     options.add_argument(
         "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
@@ -103,7 +73,7 @@ def get_weather_data(list_of_cities, retry=True):
             print('Cookie banner not found or some error occured.\n', e)
         finally:
             try:
-                driver.switch_to.default_content()  # ✅ wrapped in try in case driver is dead
+                driver.switch_to.default_content() 
             except:
                 pass
             time.sleep(2)
@@ -130,7 +100,7 @@ def get_weather_data(list_of_cities, retry=True):
     except Exception as e:
         print(f"Error: {e}")
         if retry:
-            print("Retrying with fresh driver...")  # ✅ one retry on failure
+            print("Retrying with fresh driver...") 
             if driver:
                 try:
                     driver.quit()
