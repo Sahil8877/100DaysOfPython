@@ -59,9 +59,12 @@ jobs:
           # ✅ increase shared memory available to Chrome
           DBUS_SESSION_BUS_ADDRESS: /dev/null  # prevents dbus-related crashes too
       
-      - name: Upload screenshot
+      - name: Upload debug artifacts
         uses: actions/upload-artifact@v4
-        if: always()   # or failure() if you only want it on errors
+        if: always()
         with:
-          name: debug-screenshot
-          path: after_login.png
+          name: debug-screenshots-and-html
+          path: |
+            *.png
+            *.html
+          if-no-files-found: warn

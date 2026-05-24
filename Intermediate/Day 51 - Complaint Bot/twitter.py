@@ -29,7 +29,7 @@ def get_chrome_major_version():
 URL = 'https://x.com/'
 
 def post_tweets(complaints):
-    driver = None  # initialise
+    driver = None
     try:
         options = uc.ChromeOptions()
         options.page_load_strategy = 'eager'
@@ -52,7 +52,7 @@ def post_tweets(complaints):
         username_input_element = webdriver_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[autocomplete='username']")))
         username_input_element.send_keys(os.getenv('X_PASS_EMAIL'))
 
-        continue_button = webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']") ))
+        continue_button = webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']")))
         continue_button.click()
         time.sleep(5)
         password_input_element = webdriver_wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input[type='password']")))
@@ -60,31 +60,62 @@ def post_tweets(complaints):
 
         continue_button = webdriver_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']")))
         continue_button.click()
-        time.sleep(3)  # wait after login
-        
+        time.sleep(3)
+
+        # Save post-login state (only if login succeeded)
         try:
-            # Save page source and screenshot for inspection
             with open("after_login.html", "w", encoding="utf-8") as f:
                 f.write(driver.page_source)
-            driver.save_screenshot("after_login.png")
-        except:
-            pass
+            print("Page source saved to after_login.html")
+            screenshot_path = os.path.join(os.getcwd(), "after_login.png")
+            driver.save_screenshot(screenshot_path)
+            print(f"Screenshot saved to {screenshot_path}")
+            print(f"File exists: {os.path.exists('after_login.png')}")
+        except Exception as debug_err:
+            print(f"Failed to save post-login debug artifacts: {debug_err}")
 
-        for complaint in complaints:
-            time.sleep(2)
-            textbox_element = webdriver_wait.until(EC.element_to_be_clickable(
-                (By.CSS_SELECTOR, ".public-DraftStyleDefault-block")
-            ))
-            textbox_element.send_keys(complaint.strip('"'))
-            time.sleep(2)
-            tweet_button = webdriver_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-testid='tweetButtonInline']")))
-            driver.execute_script("arguments[0].click();", tweet_button)
-            time.sleep(2)  # wait between tweets
+        # Post each complaint
+        for idx, complaint in enumerate(complaints):
+            try:
+                time.sleep(2)
+                textbox_element = webdriver_wait.until(EC.element_to_be_clickable(
+                    (By.CSS_SELECTOR, ".public-DraftStyleDefault-block")
+                ))
+                textbox_element.send_keys(complaint.strip('"'))
+                time.sleep(2)
+                tweet_button = webdriver_wait.until(EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, "button[data-testid='tweetButtonInline']")
+                ))
+                driver.execute_script("arguments[0].click();", tweet_button)
+                time.sleep(2)
+            except Exception as tweet_err:
+                print(f"Failed to post complaint {idx}: {complaint[:50]}... Error: {tweet_err}")
+                # Save error state for this specific tweet failure
+                try:
+                    driver.save_screenshot(f"error_tweet_{idx}.png")
+                    with open(f"error_tweet_{idx}.html", "w", encoding="utf-8") as f:
+                        f.write(driver.page_source)
+                    print(f"Saved error_tweet_{idx}.png and .html")
+                except:
+                    pass
+                # Continue with next complaint instead of aborting entire loop
+                continue
 
     except Exception as e:
-        print("Error occured\n", e)
+        print("Error occurred in main block:\n", e)
+        # Save critical error state with timestamp to avoid overwriting
+        if driver:
+            try:
+                timestamp = int(time.time())
+                driver.save_screenshot(f"error_{timestamp}.png")
+                with open(f"error_{timestamp}.html", "w", encoding="utf-8") as f:
+                    f.write(driver.page_source)
+                print(f"Saved error_{timestamp}.png and .html for debugging")
+            except Exception as save_err:
+                print(f"Could not save error artifacts: {save_err}")
+
     finally:
-        if driver:  
+        if driver:
             try:
                 driver.quit()
             except:
