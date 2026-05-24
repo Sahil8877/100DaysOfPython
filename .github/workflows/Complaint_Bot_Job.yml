@@ -58,3 +58,10 @@ jobs:
           DISPLAY: ":99"
           # ✅ increase shared memory available to Chrome
           DBUS_SESSION_BUS_ADDRESS: /dev/null  # prevents dbus-related crashes too
+      
+      - name: Upload screenshot
+        uses: actions/upload-artifact@v4
+        if: always()   # or failure() if you only want it on errors
+        with:
+          name: debug-screenshot
+          path: after_login.png
