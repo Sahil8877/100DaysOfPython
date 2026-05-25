@@ -22,8 +22,8 @@ def response(complains, reason):
     # Q4_K_M is the sweet spot between quality and file size (~4.9GB)
     # Q2_K was tried first but too lossy to follow system prompt instructions reliably
     llm = Llama(
-        model_path="model/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",
-        n_ctx=2048,   # Sufficient for short tweet generation, model trained on 8192 but we don't need it
+        model_path="Intermediate/Day 51 - Complaint Bot/model/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",  # ✅ fixed - was hardcoded absolute path
+        n_ctx=2048,
         verbose=False
     )
 
@@ -49,15 +49,15 @@ def response(complains, reason):
             }
         ]
 
-        response = llm.create_chat_completion(
+        result = llm.create_chat_completion(
             messages=messages,
-            max_tokens=60,          # Keeps output within tweet length
-            temperature=1.1,        # Slightly above default for creative variety
+            max_tokens=60,
+            temperature=1.1,
             top_p=0.9,
-            repeat_penalty=1.25,    # Discourages repetitive phrasing common in smaller models
-            stop=["\n", "<|eot_id|>"]  # Llama 3 specific stop token + newline to prevent multi-line output
+            repeat_penalty=1.25,
+            stop=["\n", "<|eot_id|>"]
         )
 
-        response_list.append(response['choices'][0]['message']['content'])
+        response_list.append(result['choices'][0]['message']['content'])
 
     return response_list

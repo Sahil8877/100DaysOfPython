@@ -15,6 +15,7 @@ steam/
 *.csv
 *.patch
 linkedin_bot.py
+complaint_bot_chrome_profile
 # LLM models
 *.gguf
 *.bin
