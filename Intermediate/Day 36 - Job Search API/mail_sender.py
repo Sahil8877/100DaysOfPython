@@ -9,7 +9,7 @@ job_queries = [
     {
         '0' : 
         {
-            "query":"python developer jobs in uk",
+            "query":"Application Support uk",
             "page":"1",
             "num_pages":"1",
             "country":"uk",
