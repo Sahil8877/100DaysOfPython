@@ -75,7 +75,7 @@ def get_downdetector_data(list_of_companies):
         options.page_load_strategy = 'eager'
         
         # --- HEADLESS CONFIGURATION APPLIED HERE ---
-        # options.add_argument("--headless=new")                     # Run silently in background
+        options.add_argument("--headless=new")                     # Run silently in background
         options.add_argument("--disable-gpu")                      # Prevents headless engine crashes
         options.add_argument("--no-sandbox")                       # Required for execution context safety
         options.add_argument("--disable-dev-shm-usage")            # Avoids shared memory crash limitations

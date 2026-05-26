@@ -121,7 +121,7 @@ def create_driver():
     options.page_load_strategy = 'eager'
     
     # --- HEADLESS CONFIGURATION APPLIED HERE ---
-    # options.add_argument("--headless=new")                     # Run silently in the background
+    options.add_argument("--headless=new")                     # Run silently in the background
     options.add_argument("--disable-gpu")                      # Prevents headless rendering engine crashes
     options.add_argument("--no-sandbox")                       # Ensures execution stability in isolated spaces
     options.add_argument("--disable-dev-shm-usage")            # Bypasses shared memory resource limitations

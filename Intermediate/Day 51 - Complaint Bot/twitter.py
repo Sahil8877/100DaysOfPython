@@ -76,7 +76,7 @@ def profile_valid():
     options.add_argument("--disable-blink-features=AutomationControlled")
     
     # --- Headless arguments added here ---
-    # options.add_argument("--headless=new")                     # Run silently in background
+    options.add_argument("--headless=new")                     # Run silently in background
     options.add_argument("--disable-gpu")                      # Stability for headless
     options.add_argument("--no-sandbox")                       # Avoid permission bugs
     options.add_argument("--disable-dev-shm-usage")            # Overcomes limited resource issues
