@@ -22,7 +22,7 @@ def response(complains, reason):
     # Q4_K_M is the sweet spot between quality and file size (~4.9GB)
     # Q2_K was tried first but too lossy to follow system prompt instructions reliably
     llm = Llama(
-        model_path="Intermediate/Day 51 - Complaint Bot/model/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",  # ✅ fixed - was hardcoded absolute path
+        model_path="Intermediate/Day 51 - Complaint Bot/model/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",
         n_ctx=2048,
         verbose=False
     )
