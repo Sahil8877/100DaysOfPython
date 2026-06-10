@@ -12,11 +12,12 @@ headers = {
     "Connection": "keep-alive"
 }
 
-webpage = session.get(url=URL,headers=headers)
 
-soup = BeautifulSoup(webpage.text,from_encoding="html.parser")
 def get_listings():
     try:
+        webpage = session.get(url=URL,headers=headers)
+
+        soup = BeautifulSoup(webpage.text,from_encoding="html.parser")
         property_list_element = soup.select("article[data-test='property-card']")
 
         dict_of_properties = {}
