@@ -23,3 +23,5 @@ complaint_bot_chrome_profile
 *.pth
 *.ckpt*.gguf
 *.gguf
+NASA-Log-Parsing/NASA_access_log_Jul95
+NASA-Log-Parsing/parser.py
