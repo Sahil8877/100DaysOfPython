@@ -6,7 +6,6 @@ dotenv.load_dotenv()
 from smtplib import SMTP
 
 get_blog_data = requests.get("https://api.npoint.io/25ebe1184a9fe02af7b8").json()
-print(get_blog_data)
 
 app = Flask(__name__)
 
